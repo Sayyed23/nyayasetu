@@ -12,7 +12,7 @@ export default function Header() {
     { name: "How It Works", href: "#how-it-works" },
     { name: "Core Features", href: "#features" },
     { name: "Document Types", href: "#document-types" },
-    { name: "Interactive Demo", href: "#demo" },
+    { name: "Workspace", href: "/workspace" },
     { name: "Legal Literacy", href: "#legal-literacy" },
     { name: "Trust & Security", href: "#trust-and-security" },
   ];

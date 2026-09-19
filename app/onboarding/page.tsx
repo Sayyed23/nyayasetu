@@ -1123,8 +1123,8 @@ export default function OnboardingPage() {
                     in {selectedLangObj.name}.
                   </p>
                   <Link
-                    href="/#demo"
-                    className="inline-flex items-center justify-center gap-1.5 w-full py-2.5 bg-[#065f46] text-white font-bold text-xs rounded-lg hover:bg-[#047857] transition-colors"
+                    href="/workspace"
+                    className="inline-flex items-center justify-center gap-1.5 w-full py-2.5 bg-[#065f46] text-white font-bold text-xs rounded-lg hover:bg-[#047857] transition-colors shadow-sm"
                   >
                     <span>Enter Analysis Workbench</span>
                     <ArrowRight className="w-3.5 h-3.5" />
