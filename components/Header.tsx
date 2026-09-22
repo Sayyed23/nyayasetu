@@ -62,7 +62,7 @@ export default function Header() {
 
           {/* Sign In */}
           <a
-            href="#demo"
+            href="/auth"
             className="hidden sm:inline-flex px-3.5 py-2 text-sm font-semibold text-[#0b1c30] hover:bg-[#eff4ff] rounded-lg transition-colors"
           >
             Sign In
@@ -79,9 +79,13 @@ export default function Header() {
           </a>
 
           {/* User Icon Avatar */}
-          <div className="w-8 h-8 rounded-full bg-[#0f172a] text-white flex items-center justify-center shrink-0">
+          <a
+            href="/profile"
+            className="w-8 h-8 rounded-full bg-[#0f172a] text-white flex items-center justify-center shrink-0 hover:bg-[#1e293b] transition-colors"
+            title="Citizen Profile"
+          >
             <User className="w-4 h-4" />
-          </div>
+          </a>
 
           {/* Mobile menu trigger */}
           <button
