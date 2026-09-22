@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import Logo from "@/components/Logo";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import {
   User,
   Shield,
@@ -85,46 +86,12 @@ export default function ProfileSettingsPage() {
   return (
     <div className="min-h-screen flex flex-col bg-[#f8f9ff] text-[#0b1c30]">
       {/* 1. TOP GLOBAL NAVIGATION */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-b border-[#0f172a]/5 shadow-[0_1px_8px_rgba(0,0,0,0.03)]">
-        <div className="h-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/" className="flex items-center gap-2 group">
-              <Logo className="h-9 w-auto transition-transform group-hover:scale-[1.02]" />
-            </Link>
-            <div className="hidden sm:flex flex-col border-l border-[#0f172a]/10 pl-3">
-              <span className="text-sm font-bold tracking-tight text-[#0b1c30]">NyayaSetu</span>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#64748b]">
-                Legal Intelligence Settings
-              </span>
-            </div>
-          </div>
+      <Header />
 
-          <div className="flex items-center gap-3">
-            <nav className="hidden lg:flex items-center gap-1 text-xs font-semibold text-[#45464d]">
-              <Link href="/workspace" className="px-3 py-1.5 rounded-lg hover:bg-[#eff4ff] hover:text-[#0b1c30] transition-colors">
-                Workspace
-              </Link>
-              <Link href="/legal-info" className="px-3 py-1.5 rounded-lg hover:bg-[#eff4ff] hover:text-[#0b1c30] transition-colors">
-                Legal Codex
-              </Link>
-              <Link href="/auth" className="px-3 py-1.5 rounded-lg hover:bg-[#eff4ff] hover:text-[#0b1c30] transition-colors">
-                Switch Account
-              </Link>
-            </nav>
-
-            <div className="flex items-center gap-2 bg-[#eff4ff] px-2.5 py-1 rounded-full text-xs font-semibold text-[#059669]">
-              <span className="w-2 h-2 rounded-full bg-[#059669] animate-pulse"></span>
-              <span className="hidden sm:inline">Ephemeral RAM Active</span>
-            </div>
-
-            <div className="w-8 h-8 rounded-full bg-[#0f172a] text-white flex items-center justify-center font-bold text-xs">
-              AS
-            </div>
-          </div>
-        </div>
-
+      {/* 2. MAIN CONTENT AREA */}
+      <main className="flex-1 pt-20 pb-16">
         {/* Sub-Header Breadcrumb */}
-        <div className="w-full bg-[#f1f5f9]/80 border-t border-[#0f172a]/5 px-4 sm:px-6 lg:px-8 py-1.5 text-xs text-[#64748b]">
+        <div className="w-full bg-[#f1f5f9]/80 border-b border-[#0f172a]/5 px-4 sm:px-6 lg:px-8 py-2 text-xs text-[#64748b] mb-6">
           <div className="max-w-7xl mx-auto flex items-center gap-1.5">
             <Link href="/" className="hover:text-[#0b1c30]">Home</Link>
             <ChevronRight className="w-3.5 h-3.5 text-[#94a3b8]" />
@@ -133,10 +100,7 @@ export default function ProfileSettingsPage() {
             <span className="text-[#0b1c30] font-bold">Profile & Account Preferences</span>
           </div>
         </div>
-      </header>
 
-      {/* 2. MAIN CONTENT AREA */}
-      <main className="flex-1 pt-28 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Notification Alert if Settings Saved */}
           {savedAlert && (
@@ -201,7 +165,7 @@ export default function ProfileSettingsPage() {
           {/* Master 2-Column Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Sticky Navigation Rail (3 columns) */}
-            <aside className="lg:col-span-3 sticky top-36 space-y-4">
+            <aside className="lg:col-span-3 sticky top-24 space-y-4">
               <div className="bg-white rounded-2xl p-4 border border-[#0f172a]/8 shadow-sm space-y-1">
                 <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-[#94a3b8]">
                   Settings Navigation
@@ -253,7 +217,7 @@ export default function ProfileSettingsPage() {
             {/* Main Configuration Canvas (9 columns) */}
             <div className="lg:col-span-9 space-y-8">
               {/* CARD 1: User Profile Header Card */}
-              <section id="section-profile" className="bg-white rounded-2xl border border-[#0f172a]/8 shadow-sm overflow-hidden scroll-mt-36">
+              <section id="section-profile" className="bg-white rounded-2xl border border-[#0f172a]/8 shadow-sm overflow-hidden scroll-mt-24">
                 <div className="p-6 sm:p-7 bg-gradient-to-r from-[#eff4ff] via-white to-[#f8f9ff] flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border-b border-[#0f172a]/5">
                   <div className="flex items-center gap-4">
                     <div className="w-16 h-16 rounded-full bg-[#0f172a] text-white flex items-center justify-center font-bold text-xl shadow-md ring-4 ring-white">
@@ -296,7 +260,7 @@ export default function ProfileSettingsPage() {
               </section>
 
               {/* CARD 2: Citizen Account & Authentication */}
-              <section id="section-account" className="bg-white rounded-2xl border border-[#0f172a]/8 shadow-sm p-6 sm:p-7 space-y-6 scroll-mt-36">
+              <section id="section-account" className="bg-white rounded-2xl border border-[#0f172a]/8 shadow-sm p-6 sm:p-7 space-y-6 scroll-mt-24">
                 <div className="flex items-center justify-between pb-3 border-b border-[#0f172a]/5">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-lg bg-[#eff4ff] flex items-center justify-center text-[#0b1c30]">
@@ -394,7 +358,7 @@ export default function ProfileSettingsPage() {
               </section>
 
               {/* CARD 3: Indic Dialect & Legal Simplification */}
-              <section id="section-languages" className="bg-white rounded-2xl border border-[#0f172a]/8 shadow-sm p-6 sm:p-7 space-y-6 scroll-mt-36">
+              <section id="section-languages" className="bg-white rounded-2xl border border-[#0f172a]/8 shadow-sm p-6 sm:p-7 space-y-6 scroll-mt-24">
                 <div className="flex items-center justify-between pb-3 border-b border-[#0f172a]/5">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-lg bg-[#eff4ff] flex items-center justify-center text-[#d97706]">
@@ -504,7 +468,7 @@ export default function ProfileSettingsPage() {
               </section>
 
               {/* CARD 4: Jurisdiction Preferences & Mounted Corpus */}
-              <section id="section-jurisdiction" className="bg-white rounded-2xl border border-[#0f172a]/8 shadow-sm p-6 sm:p-7 space-y-6 scroll-mt-36">
+              <section id="section-jurisdiction" className="bg-white rounded-2xl border border-[#0f172a]/8 shadow-sm p-6 sm:p-7 space-y-6 scroll-mt-24">
                 <div className="flex items-center justify-between pb-3 border-b border-[#0f172a]/5">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-lg bg-[#eff4ff] flex items-center justify-center text-[#d97706]">
@@ -578,7 +542,7 @@ export default function ProfileSettingsPage() {
               </section>
 
               {/* CARD 5: DPDP Ephemeral RAM Enclave */}
-              <section id="section-document-enclave" className="bg-white rounded-2xl border border-[#0f172a]/8 shadow-sm p-6 sm:p-7 space-y-6 scroll-mt-36">
+              <section id="section-document-enclave" className="bg-white rounded-2xl border border-[#0f172a]/8 shadow-sm p-6 sm:p-7 space-y-6 scroll-mt-24">
                 <div className="flex items-center justify-between pb-3 border-b border-[#0f172a]/5">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-lg bg-[#eff4ff] flex items-center justify-center text-[#d97706]">
@@ -632,7 +596,7 @@ export default function ProfileSettingsPage() {
               </section>
 
               {/* CARD 6: Advocates Act & Zero-Retraining Charter */}
-              <section id="section-privacy-security" className="bg-white rounded-2xl border border-[#0f172a]/8 shadow-sm p-6 sm:p-7 space-y-4 scroll-mt-36">
+              <section id="section-privacy-security" className="bg-white rounded-2xl border border-[#0f172a]/8 shadow-sm p-6 sm:p-7 space-y-4 scroll-mt-24">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg bg-[#eff4ff] flex items-center justify-center text-[#d97706]">
                     <ShieldCheck className="w-5 h-5" />
@@ -701,18 +665,7 @@ export default function ProfileSettingsPage() {
       )}
 
       {/* 3. MINIMAL FOOTER */}
-      <footer className="w-full bg-white border-t border-[#0f172a]/5 py-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#64748b]">
-          <p>© 2025 NyayaSetu Civic Intelligence Platform • DPDP Act 2023 Compliant</p>
-          <div className="flex items-center gap-4">
-            <Link href="/auth" className="hover:text-[#0b1c30]">Authentication</Link>
-            <span className="text-[#cbd5e1]">•</span>
-            <Link href="/workspace" className="hover:text-[#0b1c30]">Workspace</Link>
-            <span className="text-[#cbd5e1]">•</span>
-            <Link href="/legal-info" className="hover:text-[#0b1c30]">Statutory Codex</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
