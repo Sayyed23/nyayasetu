@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Logo from "@/components/Logo";
+import { useAuth } from "@/context/AuthContext";
 import {
   ShieldCheck,
   Check,
@@ -247,6 +248,9 @@ const stepDefinitions = [
    ====================================================== */
 
 export default function OnboardingPage() {
+  const router = useRouter();
+  const { isAuthenticated } = useAuth();
+
   // === State ===
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [bilingualEnabled, setBilingualEnabled] = useState(true);
@@ -257,6 +261,12 @@ export default function OnboardingPage() {
   const [privacyAck, setPrivacyAck] = useState(true);
   const [statutoryConsent, setStatutoryConsent] = useState(true);
   const [initialized, setInitialized] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace("/dashboard");
+    }
+  }, [isAuthenticated, router]);
 
   // === Derived data ===
   const currentStatuteSummary =

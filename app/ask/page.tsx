@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Header from "@/components/Header";
-import WorkspaceSubNav from "@/components/WorkspaceSubNav";
-import Footer from "@/components/Footer";
+import DashboardShell from "@/components/DashboardShell";
 import {
   Send,
   Sparkles,
@@ -112,12 +110,8 @@ export default function AskQAPage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8f9ff] text-[#0b1c30]">
-      <Header />
-
-      <main className="flex-1 pt-20 flex flex-col">
-        <WorkspaceSubNav activeTab="ask" />
-
+    <DashboardShell showSubNav activeSubNav="ask">
+      <main className="flex-1 flex flex-col">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 flex flex-col space-y-4 w-full">
           {/* Main 2-Pane Q&A Workbench */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 items-start">
@@ -311,8 +305,6 @@ export default function AskQAPage() {
           </div>
         </div>
       </main>
-
-      <Footer />
-    </div>
+    </DashboardShell>
   );
 }

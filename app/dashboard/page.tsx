@@ -41,12 +41,21 @@ export default function DashboardPage() {
   const router = useRouter();
   const [userConfig, setUserConfig] = useState<UserConfig>({});
   const [mounted, setMounted] = useState(false);
+  const [lastSession, setLastSession] = useState("No previous session recorded");
 
   useEffect(() => {
     setMounted(true);
     try {
       const stored = localStorage.getItem("nyayasetu_user_config");
       if (stored) setUserConfig(JSON.parse(stored));
+      const storedSession = localStorage.getItem("nyayasetu_last_session");
+      if (storedSession) {
+        setLastSession(new Date(storedSession).toLocaleString([], {
+          dateStyle: "medium",
+          timeStyle: "short",
+        }));
+      }
+      localStorage.setItem("nyayasetu_last_session", new Date().toISOString());
     } catch {
       // Ignore
     }
@@ -118,6 +127,15 @@ export default function DashboardPage() {
       color: "bg-[#d97706]",
       textColor: "text-white",
       hoverColor: "hover:bg-[#b45309]",
+    },
+    {
+      title: "Recent Analysis",
+      description: "Resume your latest document review and risk findings",
+      icon: Clock,
+      href: "/workspace",
+      color: "bg-[#0f172a]",
+      textColor: "text-white",
+      hoverColor: "hover:bg-[#1e293b]",
     },
     {
       title: "Legal Codex",
@@ -229,6 +247,10 @@ export default function DashboardPage() {
                   <Lock className="w-3.5 h-3.5 text-[#d97706]" />
                   Ephemeral RAM Processing
                 </span>
+                <span className="hidden md:flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-[#d97706]" />
+                  Last session: <strong className="text-[#0b1c30]">{lastSession}</strong>
+                </span>
               </div>
             </div>
 
@@ -245,7 +267,7 @@ export default function DashboardPage() {
 
       {/* Quick Actions */}
       <section className="w-full px-4 sm:px-6 lg:px-8 pb-6">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {quickActions.map((action) => {
             const Icon = action.icon;
             return (

@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Header from "@/components/Header";
-import WorkspaceSubNav from "@/components/WorkspaceSubNav";
-import Footer from "@/components/Footer";
+import DashboardShell from "@/components/DashboardShell";
 import {
   FileText,
+  Upload,
+  LoaderCircle,
   Download,
   PlusCircle,
   GitBranch,
@@ -58,6 +58,10 @@ export default function WorkspacePage() {
   const [showOcrModal, setShowOcrModal] = useState(false);
   const [showScheduleBUpload, setShowScheduleBUpload] = useState(false);
   const [showAskAiDrawer, setShowAskAiDrawer] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisProgress, setAnalysisProgress] = useState(0);
+  const [uploadError, setUploadError] = useState("");
   const [aiQuestion, setAiQuestion] = useState("");
   const [aiChatHistory, setAiChatHistory] = useState([
     {
@@ -181,18 +185,77 @@ export default function WorkspacePage() {
     }, 800);
   };
 
-  return (
-    <div className="min-h-screen bg-[#f8f9ff] font-sans text-[#0b1c30] flex flex-col antialiased">
-      {/* ─────────────────────────────────────────────────────────────
-          1. SHARED TOP HEADER & WORKSPACE SUB-NAV
-          ───────────────────────────────────────────────────────────── */}
-      <Header />
+  const handleFileSelect = (file: File | undefined) => {
+    if (!file) return;
+    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+      setUploadError("Please choose a PDF document to begin analysis.");
+      return;
+    }
 
-      {/* ─────────────────────────────────────────────────────────────
-          MAIN APP CONTENT (offset by fixed header)
-          ───────────────────────────────────────────────────────────── */}
-      <main className="w-full pt-16 flex-1 flex flex-col">
-        <WorkspaceSubNav activeTab={activeTab} />
+    setUploadError("");
+    setSelectedFile(file);
+    setIsAnalyzing(true);
+    setAnalysisProgress(0);
+
+    let progress = 0;
+    const interval = window.setInterval(() => {
+      progress += 25;
+      setAnalysisProgress(progress);
+      if (progress >= 100) {
+        window.clearInterval(interval);
+        setIsAnalyzing(false);
+      }
+    }, 500);
+  };
+
+  if (!selectedFile || isAnalyzing) {
+    return (
+      <DashboardShell>
+        <main className="flex-1 px-4 sm:px-6 lg:px-8 py-10 bg-[#f8f9ff]">
+          <div className="max-w-3xl mx-auto min-h-[60vh] flex items-center justify-center">
+            <section className="w-full bg-white rounded-2xl border border-[#0f172a]/10 shadow-sm p-6 sm:p-10 text-center">
+              <div className="mx-auto w-14 h-14 rounded-2xl bg-[#eff4ff] flex items-center justify-center text-[#d97706]">
+                {isAnalyzing ? <LoaderCircle className="w-7 h-7 animate-spin" /> : <Upload className="w-7 h-7" />}
+              </div>
+              <p className="mt-5 text-xs font-bold uppercase tracking-wider text-[#d97706]">
+                {isAnalyzing ? `Preparing analysis • ${analysisProgress}%` : "Start a document analysis"}
+              </p>
+              <h1 className="font-editorial text-2xl sm:text-3xl font-bold text-[#0b1c30] mt-2">
+                {isAnalyzing ? "Checking your PDF" : "Upload a legal PDF"}
+              </h1>
+              <p className="text-sm text-[#45464d] max-w-xl mx-auto mt-3 leading-relaxed">
+                {isAnalyzing
+                  ? "Ingesting the document, preparing its text layer, and building your grounded workspace."
+                  : "Choose a PDF to create a grounded workspace. Your analysis will use the document you provide instead of a preloaded example."}
+              </p>
+              {!isAnalyzing && (
+                <label className="mt-7 mx-auto max-w-md border-2 border-dashed border-[#0f172a]/15 rounded-2xl p-7 flex flex-col items-center gap-2 cursor-pointer hover:border-[#d97706] hover:bg-[#fffaf3] transition-colors">
+                  <span className="px-4 py-2 rounded-xl bg-[#0b1c30] text-white text-sm font-bold">Choose PDF</span>
+                  <span className="text-xs text-[#64748b]">PDF files only</span>
+                  <input
+                    type="file"
+                    accept="application/pdf,.pdf"
+                    className="sr-only"
+                    onChange={(event) => handleFileSelect(event.target.files?.[0])}
+                  />
+                </label>
+              )}
+              {uploadError && <p className="mt-4 text-xs font-semibold text-[#ba1a1a]">{uploadError}</p>}
+              {isAnalyzing && (
+                <div className="mt-7 h-2 rounded-full bg-[#eff4ff] overflow-hidden">
+                  <div className="h-full bg-[#d97706] transition-all duration-300" style={{ width: `${analysisProgress}%` }} />
+                </div>
+              )}
+            </section>
+          </div>
+        </main>
+      </DashboardShell>
+    );
+  }
+
+  return (
+    <DashboardShell showSubNav activeSubNav={activeTab} documentName={selectedFile.name}>
+      <div className="w-full font-sans text-[#0b1c30] flex-1 flex flex-col antialiased">
 
         {/* TOP CONTEXT SECTION */}
         <section className="w-full px-4 sm:px-6 lg:px-8 pt-6 pb-4 bg-[#f8f9ff]">
@@ -1116,13 +1179,6 @@ export default function WorkspacePage() {
             </div>
           </div>
         </section>
-      </main>
-
-      {/* ─────────────────────────────────────────────────────────────
-          FOOTER
-          ───────────────────────────────────────────────────────────── */}
-      <Footer />
-
       {/* ─────────────────────────────────────────────────────────────
           MODAL 1: PIPELINE AUDIT DETAILS
           ───────────────────────────────────────────────────────────── */}
@@ -1393,6 +1449,7 @@ export default function WorkspacePage() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </DashboardShell>
   );
 }

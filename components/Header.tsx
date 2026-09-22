@@ -129,17 +129,6 @@ export default function Header() {
                   >
                     <Icon className={`w-3.5 h-3.5 ${link.active ? "text-[#d97706]" : "text-[#64748b]"}`} />
                     <span>{link.name}</span>
-                    {link.badge && (
-                      <span
-                        className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold leading-tight ${
-                          link.active
-                            ? "bg-white/20 text-white"
-                            : "bg-[#fee2e2] text-[#b91c1c]"
-                        }`}
-                      >
-                        {link.badge}
-                      </span>
-                    )}
                   </Link>
                 );
               })

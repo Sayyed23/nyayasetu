@@ -17,9 +17,10 @@ import {
 
 interface WorkspaceSubNavProps {
   activeTab?: "studio" | "understand" | "risks" | "ask" | "compare" | "actions" | "multilingual" | "qa" | "deadlines";
+  documentName?: string;
 }
 
-export default function WorkspaceSubNav({ activeTab }: WorkspaceSubNavProps) {
+export default function WorkspaceSubNav({ activeTab, documentName }: WorkspaceSubNavProps) {
   const pathname = usePathname();
 
   const current =
@@ -99,10 +100,12 @@ export default function WorkspaceSubNav({ activeTab }: WorkspaceSubNavProps) {
             Workspace
           </Link>
           <span aria-hidden="true">/</span>
-          <span className="font-semibold text-[#0b1c30] flex items-center gap-1">
-            <FileText className="w-3.5 h-3.5 text-[#d97706]" aria-hidden="true" />
-            Residential_Tenancy_Agreement_Blr_2024.pdf
-          </span>
+          {documentName && (
+            <span className="font-semibold text-[#0b1c30] flex items-center gap-1">
+              <FileText className="w-3.5 h-3.5 text-[#d97706]" aria-hidden="true" />
+              {documentName}
+            </span>
+          )}
           {pathname !== "/workspace" && (
             <>
               <span aria-hidden="true">/</span>
