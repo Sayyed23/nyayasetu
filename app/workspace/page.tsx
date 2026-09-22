@@ -20,10 +20,7 @@ import {
   Landmark,
   Pin,
   ExternalLink,
-  BookOpen,
-  Flag,
   Brain,
-  GitCompare,
   ListTodo,
   Copy,
   Check,
@@ -454,87 +451,6 @@ export default function WorkspacePage() {
                   </span>
                 </div>
               </div>
-            </div>
-
-            {/* Segmented Interactive Mode Selector */}
-            <div className="w-full bg-[#eff4ff] p-1.5 rounded-2xl flex flex-wrap items-center gap-1.5 border border-[#0f172a]/5 shadow-inner">
-              <button
-                type="button"
-                onClick={() => setActiveTab("understand")}
-                className={`flex-1 min-w-[120px] flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-                  activeTab === "understand"
-                    ? "bg-white text-[#0b1c30] shadow-sm ring-1 ring-[#0f172a]/5"
-                    : "text-[#45464d] hover:text-[#0b1c30] hover:bg-white/50"
-                }`}
-              >
-                <BookOpen className="w-4 h-4 text-[#d97706]" />
-                <span>Understand (Studio)</span>
-              </button>
-
-              <Link
-                href="/risks"
-                className={`flex-1 min-w-[120px] flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-                  activeTab === "risks"
-                    ? "bg-white text-[#ba1a1a] shadow-sm ring-1 ring-[#0f172a]/5"
-                    : "text-[#45464d] hover:text-[#0b1c30] hover:bg-white/50"
-                }`}
-              >
-                <Flag className="w-4 h-4 text-[#ba1a1a]" />
-                <span>Check Risks</span>
-                <span className="px-1.5 py-0.2 bg-[#ffdad6] text-[#ba1a1a] text-[10px] font-bold rounded-full">
-                  3
-                </span>
-              </Link>
-
-              <Link
-                href="/ask"
-                className={`flex-1 min-w-[120px] flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-                  activeTab === "qa"
-                    ? "bg-white text-[#0b1c30] shadow-sm ring-1 ring-[#0f172a]/5"
-                    : "text-[#45464d] hover:text-[#0b1c30] hover:bg-white/50"
-                }`}
-              >
-                <Brain className="w-4 h-4 text-[#d97706]" />
-                <span>Ask Grounded Q&amp;A</span>
-                <span className="px-1.5 py-0.2 bg-[#e5eeff] text-[#0b1c30] text-[10px] font-bold rounded-full">
-                  AI
-                </span>
-              </Link>
-
-              <Link
-                href="/compare"
-                className={`flex-1 min-w-[120px] flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-                  activeTab === "compare"
-                    ? "bg-white text-[#0b1c30] shadow-sm ring-1 ring-[#0f172a]/5"
-                    : "text-[#45464d] hover:text-[#0b1c30] hover:bg-white/50"
-                }`}
-              >
-                <GitCompare className="w-4 h-4 text-[#45464d]" />
-                <span>Compare Versions</span>
-              </Link>
-
-              <Link
-                href="/actions"
-                className={`flex-1 min-w-[120px] flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-                  activeTab === "deadlines"
-                    ? "bg-white text-[#059669] shadow-sm ring-1 ring-[#0f172a]/5"
-                    : "text-[#45464d] hover:text-[#0b1c30] hover:bg-white/50"
-                }`}
-              >
-                <ListTodo className="w-4 h-4 text-[#059669]" />
-                <span>Action Center</span>
-                <span className="px-1.5 py-0.2 bg-[#ffdcc3] text-[#904d00] text-[10px] font-bold rounded-full">
-                  5
-                </span>
-              </Link>
-
-              <Link
-                href="/multilingual"
-                className="flex-1 min-w-[120px] flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold text-[#45464d] hover:text-[#0b1c30] hover:bg-white/50 transition-all"
-              >
-                <Sparkles className="w-4 h-4 text-[#7e22ce]" />
-                <span>Multilingual Indic</span>
-              </Link>
             </div>
           </div>
         </section>
