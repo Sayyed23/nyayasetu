@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import DashboardShell from "@/components/DashboardShell";
 import {
-  FileText,
   Upload,
   LoaderCircle,
   Download,
@@ -30,10 +29,7 @@ import {
   Check,
   MessageSquare,
   Sparkles,
-  AlertTriangle,
   Lock,
-  Globe,
-  User,
   ShieldCheck,
   Calendar,
   Hourglass,
@@ -46,10 +42,40 @@ import {
 } from "lucide-react";
 
 export default function WorkspacePage() {
+  // Dynamic user configuration from onboarding
+  const [userConfig] = useState<{
+    language?: string;
+    jurisdiction?: string;
+    domain?: string;
+    objective?: string;
+    privacy?: string;
+  }>(() => {
+    const defaults = {
+      language: "en",
+      jurisdiction: "karnataka",
+      domain: "rental",
+      objective: "understand",
+      privacy: "ephemeral",
+    };
+
+    if (typeof window === "undefined") return defaults;
+
+    try {
+      const stored = localStorage.getItem("nyayasetu_user_config");
+      return stored ? { ...defaults, ...JSON.parse(stored) } : defaults;
+    } catch {
+      return defaults;
+    }
+  });
+
   // Navigation & Interactive States
   const [activeTab, setActiveTab] = useState<
     "understand" | "risks" | "qa" | "compare" | "deadlines"
-  >("understand");
+  >(() => {
+    if (userConfig.objective === "risks") return "risks";
+    if (userConfig.objective === "compare") return "compare";
+    return "understand";
+  });
   const [currentPage, setCurrentPage] = useState(3);
   const [zoomLevel, setZoomLevel] = useState(100);
   const [copiedDraft, setCopiedDraft] = useState(false);
@@ -72,38 +98,6 @@ export default function WorkspacePage() {
 
   // Live 60-Minute Purge Timer countdown
   const [secondsRemaining, setSecondsRemaining] = useState(54 * 60 + 12);
-
-  // Dynamic user configuration from onboarding
-  const [userConfig, setUserConfig] = useState<{
-    language?: string;
-    jurisdiction?: string;
-    domain?: string;
-    objective?: string;
-    privacy?: string;
-  }>({
-    language: "en",
-    jurisdiction: "karnataka",
-    domain: "rental",
-    objective: "understand",
-    privacy: "ephemeral",
-  });
-
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem("nyayasetu_user_config");
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        setUserConfig(parsed);
-        if (parsed.objective === "risks") {
-          setActiveTab("risks");
-        } else if (parsed.objective === "compare") {
-          setActiveTab("compare");
-        }
-      }
-    } catch {
-      // Ignore
-    }
-  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -475,9 +469,8 @@ export default function WorkspacePage() {
                 <span>Understand</span>
               </button>
 
-              <button
-                type="button"
-                onClick={() => setActiveTab("risks")}
+              <Link
+                href="/risks"
                 className={`flex-1 min-w-[120px] flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                   activeTab === "risks"
                     ? "bg-white text-[#ba1a1a] shadow-sm ring-1 ring-[#0f172a]/5"
@@ -489,14 +482,10 @@ export default function WorkspacePage() {
                 <span className="px-1.5 py-0.2 bg-[#ffdad6] text-[#ba1a1a] text-[10px] font-bold rounded-full">
                   3
                 </span>
-              </button>
+              </Link>
 
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveTab("qa");
-                  setShowAskAiDrawer(true);
-                }}
+              <Link
+                href="/ask"
                 className={`flex-1 min-w-[120px] flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                   activeTab === "qa"
                     ? "bg-white text-[#0b1c30] shadow-sm ring-1 ring-[#0f172a]/5"
@@ -508,11 +497,10 @@ export default function WorkspacePage() {
                 <span className="px-1.5 py-0.2 bg-[#e5eeff] text-[#0b1c30] text-[10px] font-bold rounded-full">
                   AI
                 </span>
-              </button>
+              </Link>
 
-              <button
-                type="button"
-                onClick={() => setActiveTab("compare")}
+              <Link
+                href="/compare"
                 className={`flex-1 min-w-[120px] flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                   activeTab === "compare"
                     ? "bg-white text-[#0b1c30] shadow-sm ring-1 ring-[#0f172a]/5"
@@ -521,11 +509,10 @@ export default function WorkspacePage() {
               >
                 <GitCompare className="w-4 h-4 text-[#45464d]" />
                 <span>Compare Versions</span>
-              </button>
+              </Link>
 
-              <button
-                type="button"
-                onClick={() => setActiveTab("deadlines")}
+              <Link
+                href="/actions"
                 className={`flex-1 min-w-[120px] flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                   activeTab === "deadlines"
                     ? "bg-white text-[#059669] shadow-sm ring-1 ring-[#0f172a]/5"
@@ -537,7 +524,7 @@ export default function WorkspacePage() {
                 <span className="px-1.5 py-0.2 bg-[#ffdcc3] text-[#904d00] text-[10px] font-bold rounded-full">
                   5
                 </span>
-              </button>
+              </Link>
             </div>
           </div>
         </section>

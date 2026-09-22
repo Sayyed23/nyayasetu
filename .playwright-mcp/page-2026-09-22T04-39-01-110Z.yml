@@ -1,0 +1,221 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img "NyayaSetu Logo" [ref=e7]:
+            - generic [ref=e14]: NyayaSetu
+            - generic [ref=e15]: LEGAL CLARITY & EVIDENCE
+        - navigation [ref=e16]:
+          - link "Home" [ref=e17] [cursor=pointer]:
+            - /url: /
+          - link "How It Works" [ref=e18] [cursor=pointer]:
+            - /url: /#how-it-works
+          - link "Features" [ref=e19] [cursor=pointer]:
+            - /url: /#features
+          - link "Legal Information" [ref=e20] [cursor=pointer]:
+            - /url: /legal-info
+        - generic [ref=e21]:
+          - combobox "Select Regional Language" [ref=e27] [cursor=pointer]:
+            - option "English (India)" [selected]
+            - option "हिन्दी (Hindi)"
+            - option "தமிழ் (Tamil)"
+            - option "বাংলা (Bengali)"
+            - option "मराठी (Marathi)"
+            - option "తెలుగు (Telugu)"
+            - option "ગુજરાતી (Gujarati)"
+            - option "ಕನ್ನಡ (Kannada)"
+          - link "Sign In" [ref=e28] [cursor=pointer]:
+            - /url: /auth
+          - link "Get Started / Upload" [ref=e29] [cursor=pointer]:
+            - /url: /onboarding
+    - main [ref=e34]:
+      - generic [ref=e35]:
+        - generic [ref=e36]:
+          - navigation "Breadcrumb" [ref=e37]:
+            - link "Home" [ref=e38] [cursor=pointer]:
+              - /url: /
+            - generic [aria-hidden] [ref=e39]: /
+            - link "Workspace" [ref=e40] [cursor=pointer]:
+              - /url: /workspace
+            - generic [aria-hidden] [ref=e41]: /
+            - generic [aria-hidden] [ref=e42]: /
+            - generic [ref=e43]: understand
+          - generic [ref=e44]:
+            - generic [ref=e49]:
+              - text: "Session TTL:"
+              - strong [ref=e50]: 48m 10s
+            - generic [ref=e51]: Zero Retraining Guard Active
+        - navigation "Workspace sub-navigation" [ref=e57]:
+          - link "Understand" [ref=e58] [cursor=pointer]:
+            - /url: /understand
+          - link "Check Risks 3 High • 2 Unusual" [ref=e62] [cursor=pointer]:
+            - /url: /risks
+            - generic [ref=e65]: Check Risks
+            - generic [ref=e66]: 3 High • 2 Unusual
+          - link "Ask Grounded Q&A Live" [ref=e67] [cursor=pointer]:
+            - /url: /ask
+            - generic [ref=e70]: Ask Grounded Q&A
+            - generic [ref=e71]: Live
+          - link "Compare Versions" [ref=e72] [cursor=pointer]:
+            - /url: /compare
+          - link "Action Center 5 Pending" [ref=e79] [cursor=pointer]:
+            - /url: /actions
+            - generic [ref=e83]: Action Center
+            - generic [ref=e84]: 5 Pending
+          - link "Multilingual Indic ಕನ್ನಡ / हिन्दी" [ref=e85] [cursor=pointer]:
+            - /url: /multilingual
+            - generic [ref=e90]: Multilingual Indic
+            - generic [ref=e91]: ಕನ್ನಡ / हिन्दी
+      - generic [ref=e92]:
+        - generic [ref=e93]:
+          - generic [ref=e94]:
+            - generic [ref=e95]:
+              - generic [ref=e96]: Verified OCR Grounded
+              - generic [ref=e100]: "SHA-256: 7f89c…e92a"
+              - generic [ref=e101]: 1 Critical Risk Flagged
+            - heading "Residential Tenancy Agreement — Bengaluru Urban" [level=1] [ref=e104]
+            - generic [ref=e105]:
+              - generic [ref=e106]:
+                - text: "Type:"
+                - strong [ref=e107]: 11-Month Tenancy Deed
+              - generic [ref=e108]: •
+              - generic [ref=e109]:
+                - text: "Jurisdiction:"
+                - strong [ref=e110]: Karnataka (Bengaluru Urban)
+              - generic [ref=e111]: •
+              - generic [ref=e112]:
+                - text: "Source:"
+                - strong [ref=e113]: Formal Legal English (e-Stamp)
+              - generic [ref=e114]: •
+              - generic [ref=e115]: 7 Pages (24 Clauses Structured)
+          - generic [ref=e116]:
+            - link "Switch Document" [ref=e117] [cursor=pointer]:
+              - /url: /workspace
+            - button "Export Brief (PDF)" [ref=e118]
+        - generic [ref=e123]:
+          - generic [ref=e124]:
+            - button "TL;DR Executive Summary" [ref=e125]
+            - button "Section-wise Breakdown" [ref=e129]
+            - button "Key Obligations" [ref=e135]
+          - generic [ref=e140]:
+            - generic [ref=e145]: "Plain Language:"
+            - combobox [ref=e146]:
+              - option "ಕನ್ನಡ (Kannada)" [selected]
+              - option "हिन्दी (Hindi)"
+              - option "Simple English"
+              - option "தமிழ் (Tamil)"
+              - option "मराठी (Marathi)"
+        - generic [ref=e147]:
+          - generic [ref=e148]:
+            - generic [ref=e149]:
+              - text: Monthly Rent
+              - paragraph [ref=e150]: ₹38,000
+              - text: Due by 5th monthly
+            - generic [ref=e151]:
+              - text: Security Deposit
+              - paragraph [ref=e152]: ₹1,50,000
+              - text: Flagged Clause 14(b)
+            - generic [ref=e153]:
+              - text: Lock-in Period
+              - paragraph [ref=e154]: 6 Months
+              - text: Both parties bound
+            - generic [ref=e155]:
+              - text: Notice Period
+              - paragraph [ref=e156]: 1 Month
+              - text: 30 days written notice
+            - generic [ref=e157]:
+              - text: Annual Escalation
+              - paragraph [ref=e158]: 15% Hike
+              - text: "Unusually high (Market: 5%)"
+            - generic [ref=e159]:
+              - text: Agreement Tenure
+              - paragraph [ref=e160]: 11 Months
+              - text: Feb 2024 – Jan 2025
+          - generic [ref=e161]:
+            - heading "Plain-Language Legal Summary" [level=2] [ref=e166]
+            - generic [ref=e167]:
+              - paragraph [ref=e168]: This is an 11-month standard residential tenancy agreement between the landlord (Mr. R. Raghavan) and tenant (Ms. Priya Narayan) for a flat in Indiranagar, Bengaluru. You pay ₹38,000 per month plus maintenance.
+              - paragraph [ref=e169]:
+                - strong [ref=e170]: "Critical Attention Item:"
+                - text: Under Clause 14(b), the landlord claims the unilateral right to forfeit your entire ₹1,50,000 security deposit if minor aesthetic repainting is required when moving out. Under Karnataka rent law principles, ordinary wear and tear cannot justify deposit forfeiture.
+              - paragraph [ref=e171]: You are locked in for 6 months. If you vacate before 6 months, you forfeit deposit equivalent to the unexpired lock-in period. After 6 months, either party may terminate with 30 days written notice.
+          - generic [ref=e172]:
+            - 'heading "Key Clauses: Original Legalese vs. Plain Translation" [level=3] [ref=e173]'
+            - generic [ref=e179]:
+              - generic [ref=e180]:
+                - generic [ref=e181]:
+                  - text: Raw Contract Text (Clause 14b)
+                  - paragraph [ref=e182]: "\"The Lessor shall retain sole and unilateral discretion to forfeit the entirety of the Security Deposit quantified herein in the event of minor aesthetic repainting or touch-up requirements upon the vacation of demised premises.\""
+                - generic [ref=e183]:
+                  - generic [ref=e184]: Citizen Plain Meaning (ಕನ್ನಡ)
+                  - paragraph [ref=e185]: ಮನೆ ಖಾಲಿ ಮಾಡುವಾಗ ಸಣ್ಣ ಪುಟ್ಟ ಬಣ್ಣ ಬಳಿಯುವ ಖರ್ಚಿಗೆ ಮಾಲೀಕರು ನಿಮ್ಮ ₹1,50,000 ಸಂಪೂರ್ಣ ಠೇವಣಿ ಮುಟ್ಟುಗೋಲು ಹಾಕಿಕೊಳ್ಳುವ ಹಕ್ಕನ್ನು ಕಾಯ್ದಿರಿಸಿಕೊಂಡಿದ್ದಾರೆ. (ಇದು ಕಾನೂನುಬಾಹಿರ).
+              - generic [ref=e186]:
+                - generic [ref=e187]:
+                  - text: Raw Contract Text (Clause 6)
+                  - paragraph [ref=e188]: "\"The monthly rent shall automatically escalate at the rate of fifteen percent (15%) per annum upon the execution of any subsequent term or extension deed.\""
+                - generic [ref=e189]:
+                  - generic [ref=e190]: Citizen Plain Meaning (ಕನ್ನಡ)
+                  - paragraph [ref=e191]: 11 ತಿಂಗಳ ನಂತರ ಒಪ್ಪಂದ ನವೀಕರಿಸಿದರೆ, ಬಾಡಿಗೆ ಶೇಕಡಾ 15% ಹೆಚ್ಚಾಗುತ್ತದೆ (₹38,000 ರಿಂದ ₹43,700 ಕ್ಕೆ). ಬೆಂಗಳೂರು ಮಾರುಕಟ್ಟೆ ದರ 5-8% ಮಾತ್ರ.
+    - contentinfo [ref=e192]:
+      - generic [ref=e193]:
+        - generic [ref=e194]:
+          - generic [ref=e195]:
+            - link [ref=e196] [cursor=pointer]:
+              - /url: "#"
+              - img "NyayaSetu Logo" [ref=e197]:
+                - generic [ref=e204]: NyayaSetu
+                - generic [ref=e205]: LEGAL CLARITY & EVIDENCE
+            - paragraph [ref=e206]: Bridging statutory complexity and citizen access through verified multi-language legal comprehension, evidentiary structure analysis, and constitutional literacy across India.
+            - generic [ref=e207]: 256-bit Ephemeral Memory • Zero Model Retention
+          - generic [ref=e212]:
+            - generic [ref=e213]: Document Analysis
+            - link "Rental & Lease Scrutiny" [ref=e214] [cursor=pointer]:
+              - /url: "#document-types"
+            - link "Bilingual Contract Review" [ref=e215] [cursor=pointer]:
+              - /url: "#document-types"
+            - link "Employment Offer Audit" [ref=e216] [cursor=pointer]:
+              - /url: "#document-types"
+            - link "Consumer Terms Analysis" [ref=e217] [cursor=pointer]:
+              - /url: "#document-types"
+          - generic [ref=e218]:
+            - generic [ref=e219]: Legal Information
+            - link "Bhartiya Nyaya Sanhita (BNS)" [ref=e220] [cursor=pointer]:
+              - /url: "#legal-literacy"
+            - link "Consumer Rights Codex" [ref=e221] [cursor=pointer]:
+              - /url: "#legal-literacy"
+            - link "RTI Filing Blueprints" [ref=e222] [cursor=pointer]:
+              - /url: "#legal-literacy"
+            - link "e-Courts Case Tracker Guide" [ref=e223] [cursor=pointer]:
+              - /url: "#legal-literacy"
+          - generic [ref=e224]:
+            - generic [ref=e225]: Security & Statutes
+            - link "DPDP Act 2023 Compliance" [ref=e226] [cursor=pointer]:
+              - /url: "#trust-and-security"
+            - link "Ephemeral Vault Protocol" [ref=e227] [cursor=pointer]:
+              - /url: "#trust-and-security"
+            - link "Judicial Citation Lexicon" [ref=e228] [cursor=pointer]:
+              - /url: "#trust-and-security"
+            - link "Bar Council Guidelines Note" [ref=e229] [cursor=pointer]:
+              - /url: "#trust-and-security"
+        - generic [ref=e238]:
+          - generic [ref=e239]: Not Legal Advice
+          - paragraph [ref=e240]: NyayaSetu is an AI-powered legal clarity and evidence extraction platform for informational and civic literacy purposes only. It does not provide legal opinions or representation. Consult qualified legal counsel for professional representation in court or formal proceedings.
+        - generic [ref=e241]:
+          - generic [ref=e242]:
+            - generic [ref=e243]: "Supported Indic Frameworks:"
+            - generic [ref=e244]: हिन्दी
+            - generic [ref=e245]: English
+            - generic [ref=e246]: தமிழ்
+            - generic [ref=e247]: বাংলা
+            - generic [ref=e248]: मराठी
+            - generic [ref=e249]: తెలుగు
+            - generic [ref=e250]: ગુજરાતી
+            - generic [ref=e251]: ಕನ್ನಡ
+            - generic [ref=e252]: മലയാളം
+            - generic [ref=e253]: ਪੰਜਾਬੀ
+            - generic [ref=e254]: ଓଡ଼ିଆ
+            - generic [ref=e255]: + 11 More
+          - generic [ref=e256]: © 2026 NyayaSetu Civic Intelligence Platform. Bharat. All rights reserved.
+  - button "Open Next.js Dev Tools" [ref=e263] [cursor=pointer]

@@ -61,13 +61,12 @@ export default function UnderstandPage() {
             </div>
 
             <div className="flex items-center gap-3 shrink-0 flex-wrap">
-              <button
-                type="button"
-                onClick={() => alert("Switching document...")}
+              <Link
+                href="/workspace"
                 className="px-4 py-2 rounded-xl bg-[#f1f5f9] hover:bg-[#e2e8f0] text-xs font-bold text-[#0b1c30] transition-colors"
               >
                 Switch Document
-              </button>
+              </Link>
               <button
                 type="button"
                 onClick={() => alert("Exporting Executive Plain Language Summary Docket (PDF)...")}
