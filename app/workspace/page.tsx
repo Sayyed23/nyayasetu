@@ -69,6 +69,38 @@ export default function WorkspacePage() {
   // Live 60-Minute Purge Timer countdown
   const [secondsRemaining, setSecondsRemaining] = useState(54 * 60 + 12);
 
+  // Dynamic user configuration from onboarding
+  const [userConfig, setUserConfig] = useState<{
+    language?: string;
+    jurisdiction?: string;
+    domain?: string;
+    objective?: string;
+    privacy?: string;
+  }>({
+    language: "en",
+    jurisdiction: "karnataka",
+    domain: "rental",
+    objective: "understand",
+    privacy: "ephemeral",
+  });
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("nyayasetu_user_config");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        setUserConfig(parsed);
+        if (parsed.objective === "risks") {
+          setActiveTab("risks");
+        } else if (parsed.objective === "compare") {
+          setActiveTab("compare");
+        }
+      }
+    } catch {
+      // Ignore
+    }
+  }, []);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setSecondsRemaining((prev) => (prev > 0 ? prev - 1 : 0));
@@ -81,6 +113,45 @@ export default function WorkspacePage() {
     const s = totalSec % 60;
     return `${m}m ${s < 10 ? "0" : ""}${s}s`;
   };
+
+  const jurisdictionLabel =
+    userConfig.jurisdiction === "delhi"
+      ? "Delhi (DDA & DRC Act)"
+      : userConfig.jurisdiction === "maharashtra"
+      ? "Maharashtra (MRC Act 1999)"
+      : userConfig.jurisdiction === "tamilnadu"
+      ? "Tamil Nadu (TNRRRL Act 2017)"
+      : userConfig.jurisdiction === "telangana"
+      ? "Telangana (Hyd Urban Baseline)"
+      : userConfig.jurisdiction === "national"
+      ? "National (Model Tenancy Act 2021)"
+      : "Karnataka (Bengaluru Urban)";
+
+  const statutoryActName =
+    userConfig.jurisdiction === "delhi"
+      ? "Delhi Rent Act 1958"
+      : userConfig.jurisdiction === "maharashtra"
+      ? "MH Rent Control 1999"
+      : userConfig.jurisdiction === "tamilnadu"
+      ? "TNRRRL Act 2017"
+      : userConfig.jurisdiction === "telangana"
+      ? "Telangana Buildings Act"
+      : userConfig.jurisdiction === "national"
+      ? "Model Tenancy Act 2021"
+      : "KA Rent Act 1999";
+
+  const languageLabel =
+    userConfig.language === "hi"
+      ? "EN & Hindi Stamp"
+      : userConfig.language === "kn"
+      ? "EN & Kannada Stamp"
+      : userConfig.language === "ta"
+      ? "EN & Tamil Stamp"
+      : userConfig.language === "te"
+      ? "EN & Telugu Stamp"
+      : userConfig.language === "mr"
+      ? "EN & Marathi Stamp"
+      : "EN & Kannada Stamp";
 
   const counterProposalText =
     "“Escalation shall not exceed 6% upon mutual written renewal after 11 months. Security deposit of INR 2,50,000 shall be refunded within 14 banking days of vacant possession, subject only to deductions for actual verified structural damage excluding reasonable wear and tear.”";
@@ -121,7 +192,7 @@ export default function WorkspacePage() {
           MAIN APP CONTENT (offset by fixed header)
           ───────────────────────────────────────────────────────────── */}
       <main className="w-full pt-16 flex-1 flex flex-col">
-        <WorkspaceSubNav activeTab="understand" />
+        <WorkspaceSubNav activeTab={activeTab} />
 
         {/* TOP CONTEXT SECTION */}
         <section className="w-full px-4 sm:px-6 lg:px-8 pt-6 pb-4 bg-[#f8f9ff]">
@@ -221,7 +292,7 @@ export default function WorkspacePage() {
                       <p className="text-xs text-[#0b1c30] font-bold truncate leading-tight">
                         3. Language
                       </p>
-                      <p className="text-[11px] text-[#45464d] truncate">EN &amp; Kannada Stamp</p>
+                      <p className="text-[11px] text-[#45464d] truncate">{languageLabel}</p>
                     </div>
                   </div>
 
@@ -243,7 +314,7 @@ export default function WorkspacePage() {
                       <p className="text-xs text-[#d97706] font-bold truncate leading-tight">
                         5. Statutory Match
                       </p>
-                      <p className="text-[11px] text-[#b45309] truncate">KA Rent Act 1999</p>
+                      <p className="text-[11px] text-[#b45309] truncate">{statutoryActName}</p>
                     </div>
                   </div>
                 </div>
@@ -269,7 +340,7 @@ export default function WorkspacePage() {
                   11-Month Tenancy Deed
                 </span>
                 <span className="text-[11px] text-[#64748b] truncate">
-                  Bengaluru Urban standard
+                  {jurisdictionLabel} standard
                 </span>
               </div>
 
@@ -346,7 +417,7 @@ export default function WorkspacePage() {
                 onClick={() => setActiveTab("risks")}
                 className={`flex-1 min-w-[120px] flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                   activeTab === "risks"
-                    ? "bg-white text-[#0b1c30] shadow-sm ring-1 ring-[#0f172a]/5"
+                    ? "bg-white text-[#ba1a1a] shadow-sm ring-1 ring-[#0f172a]/5"
                     : "text-[#45464d] hover:text-[#0b1c30] hover:bg-white/50"
                 }`}
               >
@@ -394,7 +465,7 @@ export default function WorkspacePage() {
                 onClick={() => setActiveTab("deadlines")}
                 className={`flex-1 min-w-[120px] flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                   activeTab === "deadlines"
-                    ? "bg-white text-[#0b1c30] shadow-sm ring-1 ring-[#0f172a]/5"
+                    ? "bg-white text-[#059669] shadow-sm ring-1 ring-[#0f172a]/5"
                     : "text-[#45464d] hover:text-[#0b1c30] hover:bg-white/50"
                 }`}
               >
@@ -635,11 +706,19 @@ export default function WorkspacePage() {
                         Analysis Matrix
                       </span>
                       <span className="text-xs text-[#45464d] font-mono">
-                        Karnataka Tenancy Baseline
+                        {jurisdictionLabel} Baseline
                       </span>
                     </div>
                     <h3 className="font-editorial text-lg sm:text-xl font-bold text-[#0b1c30] mt-1">
-                      Executive Risk Scrutiny
+                      {activeTab === "risks"
+                        ? "Executive Risk Scrutiny & Vulnerability Index"
+                        : activeTab === "qa"
+                        ? "Grounded Evidence Q&A Assistant"
+                        : activeTab === "compare"
+                        ? "Dual-Corpus Redline & Version Variance"
+                        : activeTab === "deadlines"
+                        ? "Statutory Deadlines & Asymmetry Obligations"
+                        : "Executive Risk & Evidence Scrutiny"}
                     </h3>
                   </div>
 
@@ -693,8 +772,8 @@ export default function WorkspacePage() {
 
                 <p className="text-xs sm:text-sm text-[#0b1c30] leading-relaxed">
                   <strong>Key Summary:</strong> The agreement enforces unilateral rent increases
-                  exceeding Bengaluru municipal benchmarks (typical 5-8%). It introduces a punitive
-                  security deposit forfeiture term contrary to tenant protection precedents.
+                  exceeding {jurisdictionLabel} municipal benchmarks (typical 5-8%). It introduces a punitive
+                  security deposit forfeiture term contrary to statutory tenant protection precedents.
                 </p>
               </div>
 
@@ -850,69 +929,117 @@ export default function WorkspacePage() {
                 </div>
               </div>
 
-              {/* SECTION C: Obligations, Key Dates & Asymmetry Matrix */}
+              {/* SECTION C: Dynamic Tracker & Mode Inspector */}
               <div className="w-full bg-white rounded-2xl border border-[#0f172a]/5 shadow-xs p-5 sm:p-6 flex flex-col gap-3">
-                <h4 className="font-editorial text-base sm:text-lg font-bold text-[#0b1c30]">
-                  Critical Deadlines &amp; Obligations Tracker
-                </h4>
-
-                <div className="flex flex-col gap-2.5 mt-1">
-                  {/* Asymmetric Notice Item */}
-                  <div className="p-3 rounded-xl bg-[#eff4ff] flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#ffdad6] text-[#ba1a1a] flex items-center justify-center shrink-0">
-                        <Hourglass className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <p className="text-xs font-bold text-[#0b1c30]">Vacating Notice Asymmetry</p>
-                        <p className="text-[11px] text-[#45464d]">
-                          Tenant must serve 60 Days • Landlord only required 15 Days
-                        </p>
-                      </div>
-                    </div>
-                    <span className="px-2 py-0.5 rounded bg-[#ffdad6] text-[#ba1a1a] text-[10px] font-bold shrink-0">
-                      4x Imbalance
-                    </span>
-                  </div>
-
-                  {/* Rent Due Date Item */}
-                  <div className="p-3 rounded-xl bg-[#eff4ff] flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#e5eeff] text-[#0b1c30] flex items-center justify-center shrink-0">
-                        <Calendar className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <p className="text-xs font-bold text-[#0b1c30]">
-                          Monthly Consideration Date
-                        </p>
-                        <p className="text-[11px] text-[#45464d]">
-                          Payable by 5th of each month (Grace period: 3 calendar days)
-                        </p>
-                      </div>
-                    </div>
-                    <span className="px-2 py-0.5 rounded bg-[#e5eeff] text-[#0b1c30] text-[10px] font-bold shrink-0">
-                      Regular
-                    </span>
-                  </div>
-
-                  {/* Deposit Refund Item */}
-                  <div className="p-3 rounded-xl bg-[#eff4ff] flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-amber-100 text-[#d97706] flex items-center justify-center shrink-0">
-                        <Scale className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <p className="text-xs font-bold text-[#0b1c30]">Deposit Refund Deadline</p>
-                        <p className="text-[11px] text-[#45464d]">
-                          Undefined in executed text • Model Act mandates refund within 30 days
-                        </p>
-                      </div>
-                    </div>
-                    <span className="px-2 py-0.5 rounded bg-[#ffdcc3] text-[#904d00] text-[10px] font-bold shrink-0">
-                      Silent Clause
-                    </span>
-                  </div>
+                <div className="flex items-center justify-between">
+                  <h4 className="font-editorial text-base sm:text-lg font-bold text-[#0b1c30]">
+                    {activeTab === "compare"
+                      ? "Dual-Corpus Variance & Alignment Scrutiny"
+                      : activeTab === "deadlines"
+                      ? "Critical Deadlines & Enforceability Tracker"
+                      : "Critical Deadlines & Obligations Tracker"}
+                  </h4>
+                  {activeTab === "compare" && (
+                    <Link
+                      href="/compare"
+                      className="text-xs font-bold text-[#d97706] hover:underline flex items-center gap-1"
+                    >
+                      <span>Full Redline Engine</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </Link>
+                  )}
+                  {activeTab === "deadlines" && (
+                    <Link
+                      href="/actions"
+                      className="text-xs font-bold text-[#059669] hover:underline flex items-center gap-1"
+                    >
+                      <span>Action Center Docket</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </Link>
+                  )}
                 </div>
+
+                {activeTab === "compare" ? (
+                  <div className="flex flex-col gap-2.5 mt-1">
+                    <div className="p-3.5 rounded-xl bg-[#fef2f2] border border-[#fecaca] flex flex-col gap-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-[#991b1b]">Original Clause 9.3</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-[#fee2e2] text-[#991b1b] font-bold">Unilateral 15% Spike</span>
+                      </div>
+                      <p className="text-xs font-mono text-[#7f1d1d]">
+                        “Lessor reserves unrestricted discretion to increase rent by 15% upon 11 months...”
+                      </p>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl bg-[#ecfdf5] border border-[#a7f3d0] flex flex-col gap-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-[#065f46]">Proposed Counter-Draft</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-[#d1fae5] text-[#065f46] font-bold">Statutory 6% Cap</span>
+                      </div>
+                      <p className="text-xs font-mono text-[#064e3b]">
+                        “Escalation shall not exceed 6% upon mutual written renewal after 11 months...”
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-2.5 mt-1">
+                    {/* Asymmetric Notice Item */}
+                    <div className="p-3 rounded-xl bg-[#eff4ff] flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-[#ffdad6] text-[#ba1a1a] flex items-center justify-center shrink-0">
+                          <Hourglass className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-[#0b1c30]">Vacating Notice Asymmetry</p>
+                          <p className="text-[11px] text-[#45464d]">
+                            Tenant must serve 60 Days • Landlord only required 15 Days
+                          </p>
+                        </div>
+                      </div>
+                      <span className="px-2 py-0.5 rounded bg-[#ffdad6] text-[#ba1a1a] text-[10px] font-bold shrink-0">
+                        4x Imbalance
+                      </span>
+                    </div>
+
+                    {/* Rent Due Date Item */}
+                    <div className="p-3 rounded-xl bg-[#eff4ff] flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-[#e5eeff] text-[#0b1c30] flex items-center justify-center shrink-0">
+                          <Calendar className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-[#0b1c30]">
+                            Monthly Consideration Date
+                          </p>
+                          <p className="text-[11px] text-[#45464d]">
+                            Payable by 5th of each month (Grace period: 3 calendar days)
+                          </p>
+                        </div>
+                      </div>
+                      <span className="px-2 py-0.5 rounded bg-[#e5eeff] text-[#0b1c30] text-[10px] font-bold shrink-0">
+                        Regular
+                      </span>
+                    </div>
+
+                    {/* Deposit Refund Item */}
+                    <div className="p-3 rounded-xl bg-[#eff4ff] flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-amber-100 text-[#d97706] flex items-center justify-center shrink-0">
+                          <Scale className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-[#0b1c30]">Deposit Refund Deadline</p>
+                          <p className="text-[11px] text-[#45464d]">
+                            Undefined in executed text • Model Act mandates refund within 30 days
+                          </p>
+                        </div>
+                      </div>
+                      <span className="px-2 py-0.5 rounded bg-[#ffdcc3] text-[#904d00] text-[10px] font-bold shrink-0">
+                        Silent Clause
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

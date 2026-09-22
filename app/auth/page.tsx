@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Logo from "@/components/Logo";
+import { useAuth } from "@/context/AuthContext";
 import {
   Mail,
   Lock,
@@ -32,6 +33,8 @@ export default function SimpleAuthPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
+
+  const { login } = useAuth();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,22 +65,24 @@ export default function SimpleAuthPage() {
     // Simulate instant secure auth
     setTimeout(() => {
       setLoading(false);
+      login(email, name);
       setSuccessMsg(isLogin ? "Welcome back! Redirecting..." : "Account created successfully! Redirecting...");
       setTimeout(() => {
-        router.push("/workspace");
-      }, 800);
-    }, 600);
+        router.push("/dashboard");
+      }, 700);
+    }, 500);
   };
 
   const handleDigiLocker = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
+      login("priya.narayan@citizen.digilocker.in", "Priya Narayan (Aadhaar/DigiLocker)");
       setSuccessMsg("DigiLocker identity verified! Redirecting...");
       setTimeout(() => {
-        router.push("/workspace");
+        router.push("/dashboard");
       }, 700);
-    }, 600);
+    }, 500);
   };
 
   return (
@@ -329,8 +334,9 @@ export default function SimpleAuthPage() {
                   setLoading(true);
                   setTimeout(() => {
                     setLoading(false);
+                    login("priya.sen@gmail.com", "Priya Sen (Google)");
                     router.push("/workspace");
-                  }, 600);
+                  }, 500);
                 }}
                 className="h-10 px-3 rounded-xl border border-[#cbd5e1] hover:bg-[#eff4ff] text-xs font-bold text-[#0b1c30] flex items-center justify-center gap-2 transition-colors"
               >

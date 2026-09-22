@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Header from "@/components/Header";
-import WorkspaceSubNav from "@/components/WorkspaceSubNav";
-import Footer from "@/components/Footer";
+import DashboardShell from "@/components/DashboardShell";
 import {
   AlertTriangle,
   ShieldAlert,
@@ -111,12 +109,7 @@ export default function CheckRisksPage() {
   });
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8f9ff] text-[#0b1c30]">
-      <Header />
-
-      <main className="flex-1 pt-20">
-        <WorkspaceSubNav activeTab="risks" />
-
+    <DashboardShell showSubNav activeSubNav="risks">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
           {/* Header Diagnostic Box */}
           <div className="bg-white rounded-2xl p-6 border border-[#0f172a]/8 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6">
@@ -296,9 +289,6 @@ export default function CheckRisksPage() {
             })}
           </div>
         </div>
-      </main>
-
-      <Footer />
-    </div>
+    </DashboardShell>
   );
 }

@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Logo from "@/components/Logo";
 import {
   ShieldCheck,
@@ -278,6 +279,21 @@ export default function OnboardingPage() {
         "Please accept both the privacy acknowledgment and the statutory consent to proceed."
       );
       return;
+    }
+    // Persist configuration so workspace and other workbench pages dynamically reflect selections
+    try {
+      localStorage.setItem(
+        "nyayasetu_user_config",
+        JSON.stringify({
+          language: selectedLanguage,
+          jurisdiction: selectedJurisdiction,
+          domain: selectedDomain,
+          objective: selectedObjective,
+          privacy: selectedPrivacy,
+        })
+      );
+    } catch {
+      // Ignore storage restrictions
     }
     setInitialized(true);
   };
@@ -1113,20 +1129,20 @@ export default function OnboardingPage() {
                 <div className="p-4 bg-[#ecfdf5] border border-[#a7f3d0] rounded-xl text-center">
                   <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-[#065f46] mb-1">
                     <Check className="w-4 h-4" />
-                    <span>Workspace Successfully Initialized!</span>
+                    <span>Configuration Complete!</span>
                   </div>
                   <p className="text-[11px] text-[#065f46] mb-3">
                     Configured for{" "}
                     {jurisdictionOptions.find(
                       (j) => j.value === selectedJurisdiction
                     )?.label || selectedJurisdiction}{" "}
-                    in {selectedLangObj.name}.
+                    in {selectedLangObj.name}. Sign in to access your workspace.
                   </p>
                   <Link
-                    href="/workspace"
+                    href="/auth"
                     className="inline-flex items-center justify-center gap-1.5 w-full py-2.5 bg-[#065f46] text-white font-bold text-xs rounded-lg hover:bg-[#047857] transition-colors shadow-sm"
                   >
-                    <span>Enter Analysis Workbench</span>
+                    <span>Continue to Sign In</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>

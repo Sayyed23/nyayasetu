@@ -22,6 +22,8 @@ export const metadata: Metadata = {
     "Demystify Indian legal documents, agreements, and notices with grounded evidence, zero hallucinations, and multilingual plain-language clarity.",
 };
 
+import { AuthProvider } from "@/context/AuthContext";
+
 export default function RootLayout({
   children,
 }: {
@@ -33,7 +35,7 @@ export default function RootLayout({
       className={`${merriweather.variable} ${plusJakartaSans.variable} scroll-smooth antialiased`}
     >
       <body className="min-h-screen bg-[#f8f9ff] font-sans text-[#0b1c30] flex flex-col">
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
