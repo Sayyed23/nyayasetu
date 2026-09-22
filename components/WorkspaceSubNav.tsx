@@ -92,18 +92,18 @@ export default function WorkspaceSubNav({ activeTab }: WorkspaceSubNavProps) {
       {/* Top telemetry & metadata strip */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-col md:flex-row md:items-center justify-between gap-2.5 text-xs text-[#64748b]">
         {/* Breadcrumbs */}
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <Link href="/" className="hover:text-[#0b1c30] transition-colors">Home</Link>
-          <span>/</span>
-          <Link href="/workspace" className="hover:text-[#0b1c30] transition-colors">Workspace</Link>
-          <span>/</span>
+        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 flex-wrap">
+          <Link href="/" className="hover:text-[#0b1c30] transition-colors rounded-sm focus-visible:ring-2 focus-visible:ring-[#d97706] focus-visible:outline-none">Home</Link>
+          <span aria-hidden="true">/</span>
+          <Link href="/workspace" className="hover:text-[#0b1c30] transition-colors rounded-sm focus-visible:ring-2 focus-visible:ring-[#d97706] focus-visible:outline-none">Workspace</Link>
+          <span aria-hidden="true">/</span>
           <span className="font-semibold text-[#0b1c30] flex items-center gap-1">
-            <FileText className="w-3.5 h-3.5 text-[#d97706]" />
+            <FileText className="w-3.5 h-3.5 text-[#d97706]" aria-hidden="true" />
             Residential_Tenancy_Agreement_Blr_2024.pdf
           </span>
-          <span>/</span>
+          <span aria-hidden="true">/</span>
           <span className="text-[#d97706] font-bold capitalize">{current} Mode</span>
-        </div>
+        </nav>
 
         {/* Live session status */}
         <div className="flex items-center gap-3">
@@ -120,7 +120,7 @@ export default function WorkspaceSubNav({ activeTab }: WorkspaceSubNavProps) {
 
       {/* Subnav Pills Tab Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-3">
-        <div className="flex items-center gap-1.5 overflow-x-auto py-1 scrollbar-none">
+        <nav aria-label="Workspace sub-navigation" className="flex items-center gap-1.5 overflow-x-auto py-1 scrollbar-none">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = current === item.id;
@@ -128,13 +128,14 @@ export default function WorkspaceSubNav({ activeTab }: WorkspaceSubNavProps) {
               <Link
                 key={item.id}
                 href={item.href}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+                aria-current={isActive ? "page" : undefined}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all focus-visible:ring-2 focus-visible:ring-[#d97706] focus-visible:ring-offset-2 focus-visible:outline-none ${
                   isActive
                     ? "bg-[#0f172a] text-white shadow-sm"
                     : "bg-white text-[#45464d] hover:bg-[#eff4ff] hover:text-[#0b1c30] border border-[#0f172a]/5"
                 }`}
               >
-                <Icon className={`w-4 h-4 ${isActive ? "text-[#d97706]" : "text-[#64748b]"}`} />
+                <Icon className={`w-4 h-4 ${isActive ? "text-[#d97706]" : "text-[#64748b]"}`} aria-hidden="true" />
                 <span>{item.label}</span>
                 {item.badge && (
                   <span
@@ -148,7 +149,7 @@ export default function WorkspaceSubNav({ activeTab }: WorkspaceSubNavProps) {
               </Link>
             );
           })}
-        </div>
+        </nav>
       </div>
     </div>
   );
