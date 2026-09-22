@@ -2,7 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Logo from "@/components/Logo";
+import Header from "@/components/Header";
+import WorkspaceSubNav from "@/components/WorkspaceSubNav";
+import Footer from "@/components/Footer";
 import {
   FileText,
   Download,
@@ -111,109 +113,22 @@ export default function WorkspacePage() {
   return (
     <div className="min-h-screen bg-[#f8f9ff] font-sans text-[#0b1c30] flex flex-col antialiased">
       {/* ─────────────────────────────────────────────────────────────
-          1. FIXED TOP APP HEADER
+          1. SHARED TOP HEADER & WORKSPACE SUB-NAV
           ───────────────────────────────────────────────────────────── */}
-      <header className="fixed top-0 left-0 right-0 w-full z-50 bg-white/95 backdrop-blur-xl border-b border-[#0f172a]/5 shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
-        <div className="h-16 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
-          {/* Brand Logo */}
-          <div className="flex items-center gap-6">
-            <Link href="/" className="flex items-center gap-2 group">
-              <Logo className="h-8 w-auto transition-transform group-hover:scale-[1.02]" />
-              <div className="flex flex-col">
-                <span className="font-semibold text-sm text-[#0b1c30] tracking-tight leading-none">
-                  NyayaSetu
-                </span>
-                <span className="text-[10px] text-[#45464d] font-medium leading-none mt-0.5">
-                  Legal Intelligence
-                </span>
-              </div>
-            </Link>
-
-            {/* Main Workspace Navigation */}
-            <nav className="hidden md:flex items-center gap-1 text-xs">
-              <Link
-                href="/"
-                className="px-3 py-1.5 rounded-lg text-[#45464d] hover:bg-[#eff4ff] hover:text-[#0b1c30] transition-colors"
-              >
-                Dashboard
-              </Link>
-              <span className="px-3 py-1.5 rounded-lg bg-[#dce9ff] text-[#0b1c30] font-semibold">
-                Documents
-              </span>
-              <button
-                type="button"
-                onClick={() => setActiveTab("compare")}
-                className="px-3 py-1.5 rounded-lg text-[#45464d] hover:bg-[#eff4ff] hover:text-[#0b1c30] transition-colors"
-              >
-                Compare
-              </button>
-              <Link
-                href="/#legal-literacy"
-                className="px-3 py-1.5 rounded-lg text-[#45464d] hover:bg-[#eff4ff] hover:text-[#0b1c30] transition-colors"
-              >
-                Legal Information
-              </Link>
-            </nav>
-          </div>
-
-          {/* Right Header Statuses & Controls */}
-          <div className="flex items-center gap-3">
-            {/* Language Selector */}
-            <button
-              type="button"
-              className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-[#eff4ff] border border-[#0f172a]/5 rounded-lg text-xs text-[#45464d] hover:text-[#0b1c30] transition-colors"
-            >
-              <Globe className="w-3.5 h-3.5 text-[#d97706]" />
-              <span>English (India)</span>
-            </button>
-
-            {/* Ephemeral RAM Safe Status */}
-            <div className="flex items-center gap-1.5 px-2.5 py-1 bg-[#eff4ff] border border-[#0f172a]/5 rounded-full">
-              <Lock className="w-3 h-3 text-[#d97706]" />
-              <span className="text-[11px] font-semibold text-[#45464d] hidden sm:inline">
-                Ephemeral RAM active
-              </span>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            </div>
-
-            {/* Profile Avatar with Indian Territory Badge */}
-            <div className="relative flex items-center">
-              <div className="w-8 h-8 rounded-full bg-[#0b1c30] text-white flex items-center justify-center text-xs font-bold shadow-xs">
-                <User className="w-4 h-4 text-white" />
-              </div>
-              <span className="absolute -bottom-1 -right-1 px-1 py-0.2 bg-[#d97706] text-white text-[9px] font-bold leading-tight rounded-full shadow-xs">
-                IN
-              </span>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* ─────────────────────────────────────────────────────────────
-          MAIN APP CONTENT (offset by header)
+          MAIN APP CONTENT (offset by fixed header)
           ───────────────────────────────────────────────────────────── */}
       <main className="w-full pt-16 flex-1 flex flex-col">
+        <WorkspaceSubNav activeTab="understand" />
+
         {/* TOP CONTEXT SECTION */}
         <section className="w-full px-4 sm:px-6 lg:px-8 pt-6 pb-4 bg-[#f8f9ff]">
           <div className="max-w-7xl mx-auto flex flex-col gap-4">
-            {/* Breadcrumb & Action Row */}
+            {/* Header & Action Row */}
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               <div className="flex flex-col gap-1 min-w-0">
-                {/* Breadcrumb Trail */}
-                <div className="flex items-center gap-1 text-xs text-[#45464d]">
-                  <Link href="/" className="hover:text-[#0b1c30] transition-colors">
-                    Workspace
-                  </Link>
-                  <ChevronRight className="w-3.5 h-3.5 text-[#76777d]" />
-                  <span className="hover:text-[#0b1c30] cursor-pointer">
-                    Contracts &amp; Tenancy
-                  </span>
-                  <ChevronRight className="w-3.5 h-3.5 text-[#76777d]" />
-                  <span className="text-[#0b1c30] font-semibold truncate max-w-[240px] sm:max-w-md">
-                    Residential_Tenancy_Agreement_Blr_2024.pdf
-                  </span>
-                </div>
-
                 {/* Page Title & Badges */}
                 <div className="flex flex-wrap items-center gap-2.5 mt-1">
                   <h1 className="font-editorial text-2xl sm:text-3xl font-bold text-[#0b1c30] tracking-tight">
@@ -1079,42 +994,7 @@ export default function WorkspacePage() {
       {/* ─────────────────────────────────────────────────────────────
           FOOTER
           ───────────────────────────────────────────────────────────── */}
-      <footer className="w-full bg-[#eff4ff] border-t border-[#0f172a]/5 shadow-[0_-1px_8px_rgba(0,0,0,0.03)] mt-auto">
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-4">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div className="flex flex-col gap-0.5 max-w-2xl">
-              <p className="text-xs font-bold text-[#0b1c30]">
-                Informational legal technology — Not Legal Advice under Advocates Act 1961
-              </p>
-              <p className="text-[11px] text-[#45464d]">
-                DPDP Act 2023 Compliant • Zero Model Retraining • 60-min Cryptographic Purge
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-4 text-xs text-[#45464d]">
-              <a href="#" className="hover:text-[#0b1c30] transition-colors">
-                Privacy Charter
-              </a>
-              <a href="#" className="hover:text-[#0b1c30] transition-colors">
-                Evidence Standards
-              </a>
-              <a href="#" className="hover:text-[#0b1c30] transition-colors">
-                BCI Compliance
-              </a>
-              <a href="#" className="hover:text-[#0b1c30] transition-colors">
-                Help &amp; Redressal Desk
-              </a>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center justify-between pt-3 border-t border-slate-200/60 text-[11px] text-[#64748b] gap-2">
-            <span>© 2024 NyayaSetu Civic Intelligence Platform. Republic of India.</span>
-            <span className="uppercase tracking-wider font-medium">
-              Ministry of Law &amp; Justice Compliant Workflows
-            </span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       {/* ─────────────────────────────────────────────────────────────
           MODAL 1: PIPELINE AUDIT DETAILS
