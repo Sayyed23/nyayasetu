@@ -96,40 +96,28 @@ export default function WorkspaceSubNav({ activeTab, documentName }: WorkspaceSu
         <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 flex-wrap">
           <Link href="/" className="hover:text-[#0b1c30] transition-colors rounded-sm focus-visible:ring-2 focus-visible:ring-[#d97706] focus-visible:outline-none">Home</Link>
           <span aria-hidden="true">/</span>
-          <Link href="/workspace" className={`transition-colors rounded-sm focus-visible:ring-2 focus-visible:ring-[#d97706] focus-visible:outline-none ${pathname === "/workspace" && !activeTab ? "font-bold text-[#0b1c30]" : "hover:text-[#0b1c30]"}`}>
+          <Link href="/workspace" className={`transition-colors rounded-sm focus-visible:ring-2 focus-visible:ring-[#d97706] focus-visible:outline-none ${pathname === "/workspace" ? "font-bold text-[#0b1c30]" : "hover:text-[#0b1c30]"}`}>
             Workspace
           </Link>
           <span aria-hidden="true">/</span>
-          {documentName && (
-            <span className="font-semibold text-[#0b1c30] flex items-center gap-1">
-              <FileText className="w-3.5 h-3.5 text-[#d97706]" aria-hidden="true" />
-              {documentName}
-            </span>
-          )}
-          {pathname !== "/workspace" && (
-            <>
-              <span aria-hidden="true">/</span>
-              <span className="text-[#d97706] font-bold capitalize">
-                {current === "ask" ? "Grounded Q&A" : current === "multilingual" ? "Multilingual Indic" : current === "actions" ? "Action Center" : current}
-              </span>
-            </>
-          )}
-          {pathname === "/workspace" && (
-            <>
-              <span aria-hidden="true">/</span>
-              <span className="text-[#d97706] font-bold">
-                {activeTab === "risks"
-                  ? "Risks Matrix"
-                  : activeTab === "qa"
-                  ? "Grounded Q&A"
-                  : activeTab === "compare"
-                  ? "Version Compare"
-                  : activeTab === "deadlines"
-                  ? "Action & Deadlines"
-                  : "Studio Mode"}
-              </span>
-            </>
-          )}
+          <span className="font-semibold text-[#0b1c30] flex items-center gap-1">
+            <FileText className="w-3.5 h-3.5 text-[#d97706]" aria-hidden="true" />
+            {documentName || "Nyayasetu_PRD_v2.1_revised_compact.pdf"}
+          </span>
+          <span aria-hidden="true">/</span>
+          <span className="text-[#d97706] font-bold">
+            {current === "risks"
+              ? "Check Risks"
+              : current === "ask" || activeTab === "qa"
+              ? "Ask Grounded Q&A"
+              : current === "compare"
+              ? "Compare Versions"
+              : current === "actions" || activeTab === "deadlines"
+              ? "Action Center"
+              : current === "multilingual"
+              ? "Multilingual Indic"
+              : "Understand (Studio)"}
+          </span>
         </nav>
 
         {/* Live session status */}
