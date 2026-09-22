@@ -23,9 +23,20 @@ interface WorkspaceSubNavProps {
 export default function WorkspaceSubNav({ activeTab, documentName }: WorkspaceSubNavProps) {
   const pathname = usePathname();
 
-  const current =
-    activeTab ||
-    (pathname?.includes("/understand")
+  const normalizedTab =
+    activeTab === "studio" || activeTab === "understand"
+      ? "understand"
+      : activeTab === "risks"
+      ? "risks"
+      : activeTab === "ask" || activeTab === "qa"
+      ? "ask"
+      : activeTab === "compare"
+      ? "compare"
+      : activeTab === "actions" || activeTab === "deadlines"
+      ? "actions"
+      : activeTab === "multilingual"
+      ? "multilingual"
+      : pathname?.includes("/understand")
       ? "understand"
       : pathname?.includes("/risks")
       ? "risks"
@@ -37,12 +48,21 @@ export default function WorkspaceSubNav({ activeTab, documentName }: WorkspaceSu
       ? "actions"
       : pathname?.includes("/multilingual")
       ? "multilingual"
-      : "understand");
+      : "understand";
+
+  const sectionLabelMap: Record<string, string> = {
+    understand: "Understand (Studio)",
+    risks: "Check Risks",
+    ask: "Ask Grounded Q&A",
+    compare: "Compare Versions",
+    actions: "Action Center",
+    multilingual: "Multilingual Indic",
+  };
 
   const navItems = [
     {
       id: "understand",
-      label: "Understand",
+      label: "Understand (Studio)",
       href: "/workspace",
       icon: BookOpen,
       badge: null,
@@ -88,6 +108,8 @@ export default function WorkspaceSubNav({ activeTab, documentName }: WorkspaceSu
     },
   ];
 
+  const docName = documentName || "Orion_PRD_v2.0.pdf";
+
   return (
     <div className="w-full bg-[#f8f9ff] border-b border-[#0f172a]/10">
       {/* Top telemetry & metadata strip */}
@@ -96,40 +118,18 @@ export default function WorkspaceSubNav({ activeTab, documentName }: WorkspaceSu
         <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 flex-wrap">
           <Link href="/" className="hover:text-[#0b1c30] transition-colors rounded-sm focus-visible:ring-2 focus-visible:ring-[#d97706] focus-visible:outline-none">Home</Link>
           <span aria-hidden="true">/</span>
-          <Link href="/workspace" className={`transition-colors rounded-sm focus-visible:ring-2 focus-visible:ring-[#d97706] focus-visible:outline-none ${pathname === "/workspace" && !activeTab ? "font-bold text-[#0b1c30]" : "hover:text-[#0b1c30]"}`}>
+          <Link href="/workspace" className="hover:text-[#0b1c30] transition-colors rounded-sm focus-visible:ring-2 focus-visible:ring-[#d97706] focus-visible:outline-none">
             Workspace
           </Link>
           <span aria-hidden="true">/</span>
-          {documentName && (
-            <span className="font-semibold text-[#0b1c30] flex items-center gap-1">
-              <FileText className="w-3.5 h-3.5 text-[#d97706]" aria-hidden="true" />
-              {documentName}
-            </span>
-          )}
-          {pathname !== "/workspace" && (
-            <>
-              <span aria-hidden="true">/</span>
-              <span className="text-[#d97706] font-bold capitalize">
-                {current === "ask" ? "Grounded Q&A" : current === "multilingual" ? "Multilingual Indic" : current === "actions" ? "Action Center" : current}
-              </span>
-            </>
-          )}
-          {pathname === "/workspace" && (
-            <>
-              <span aria-hidden="true">/</span>
-              <span className="text-[#d97706] font-bold">
-                {activeTab === "risks"
-                  ? "Risks Matrix"
-                  : activeTab === "qa"
-                  ? "Grounded Q&A"
-                  : activeTab === "compare"
-                  ? "Version Compare"
-                  : activeTab === "deadlines"
-                  ? "Action & Deadlines"
-                  : "Studio Mode"}
-              </span>
-            </>
-          )}
+          <span className="font-semibold text-[#0b1c30] flex items-center gap-1">
+            <FileText className="w-3.5 h-3.5 text-[#d97706]" aria-hidden="true" />
+            {docName}
+          </span>
+          <span aria-hidden="true">/</span>
+          <span className="text-[#d97706] font-bold">
+            {sectionLabelMap[normalizedTab] || "Understand (Studio)"}
+          </span>
         </nav>
 
         {/* Live session status */}
@@ -150,7 +150,7 @@ export default function WorkspaceSubNav({ activeTab, documentName }: WorkspaceSu
         <nav aria-label="Workspace sub-navigation" className="flex items-center gap-1.5 overflow-x-auto py-1 scrollbar-none">
           {navItems.map((item) => {
             const Icon = item.icon;
-            const isActive = current === item.id;
+            const isActive = normalizedTab === item.id;
             return (
               <Link
                 key={item.id}

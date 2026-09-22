@@ -84,7 +84,9 @@ export default function WorkspacePage() {
   const [showOcrModal, setShowOcrModal] = useState(false);
   const [showScheduleBUpload, setShowScheduleBUpload] = useState(false);
   const [showAskAiDrawer, setShowAskAiDrawer] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(
+    () => new File([""], "Orion_PRD_v2.0.pdf", { type: "application/pdf" })
+  );
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [uploadError, setUploadError] = useState("");
@@ -466,7 +468,7 @@ export default function WorkspacePage() {
                 }`}
               >
                 <BookOpen className="w-4 h-4 text-[#d97706]" />
-                <span>Understand</span>
+                <span>Understand (Studio)</span>
               </button>
 
               <Link
@@ -493,7 +495,7 @@ export default function WorkspacePage() {
                 }`}
               >
                 <Brain className="w-4 h-4 text-[#d97706]" />
-                <span>Grounded Q&amp;A</span>
+                <span>Ask Grounded Q&amp;A</span>
                 <span className="px-1.5 py-0.2 bg-[#e5eeff] text-[#0b1c30] text-[10px] font-bold rounded-full">
                   AI
                 </span>
@@ -520,10 +522,18 @@ export default function WorkspacePage() {
                 }`}
               >
                 <ListTodo className="w-4 h-4 text-[#059669]" />
-                <span>Action &amp; Deadlines</span>
+                <span>Action Center</span>
                 <span className="px-1.5 py-0.2 bg-[#ffdcc3] text-[#904d00] text-[10px] font-bold rounded-full">
                   5
                 </span>
+              </Link>
+
+              <Link
+                href="/multilingual"
+                className="flex-1 min-w-[120px] flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold text-[#45464d] hover:text-[#0b1c30] hover:bg-white/50 transition-all"
+              >
+                <Sparkles className="w-4 h-4 text-[#7e22ce]" />
+                <span>Multilingual Indic</span>
               </Link>
             </div>
           </div>
