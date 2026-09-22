@@ -43,7 +43,7 @@ export default function WorkspaceSubNav({ activeTab, documentName }: WorkspaceSu
     {
       id: "understand",
       label: "Understand",
-      href: "/understand",
+      href: "/workspace",
       icon: BookOpen,
       badge: null,
     },

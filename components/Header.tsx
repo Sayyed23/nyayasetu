@@ -23,28 +23,38 @@ import {
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [workspaceDropdownOpen, setWorkspaceDropdownOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState("en");
 
   const pathname = usePathname();
   const router = useRouter();
   const { isAuthenticated, user, logout } = useAuth();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const workspaceDropdownRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdown on click outside
+  // Close dropdowns on click outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setUserDropdownOpen(false);
+      }
+      if (workspaceDropdownRef.current && !workspaceDropdownRef.current.contains(event.target as Node)) {
+        setWorkspaceDropdownOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Close dropdown on route change
+  // Close dropdowns on route change
+  const prevPathname = useRef(pathname);
   useEffect(() => {
-    setUserDropdownOpen(false);
-    setMobileMenuOpen(false);
+    if (prevPathname.current !== pathname) {
+      prevPathname.current = pathname;
+      setUserDropdownOpen(false);
+      setWorkspaceDropdownOpen(false);
+      setMobileMenuOpen(false);
+    }
   }, [pathname]);
 
   // Public Landing / Information links
@@ -117,6 +127,93 @@ export default function Header() {
           {isAuthenticated
             ? authNavLinks.map((link) => {
                 const Icon = link.icon;
+                if (link.name === "Workspace") {
+                  return (
+                    <div key={link.name} className="relative" ref={workspaceDropdownRef}>
+                      <div className="flex items-center">
+                        <Link
+                          href={link.href}
+                          className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-l-lg transition-all ${
+                            link.active
+                              ? "bg-[#0f172a] text-white shadow-xs font-bold"
+                              : "text-[#45464d] hover:text-[#0b1c30] hover:bg-[#eff4ff]"
+                          }`}
+                        >
+                          <Icon className={`w-3.5 h-3.5 ${link.active ? "text-[#d97706]" : "text-[#64748b]"}`} />
+                          <span>{link.name}</span>
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => setWorkspaceDropdownOpen(!workspaceDropdownOpen)}
+                          className={`px-1 py-1.5 text-xs rounded-r-lg transition-all flex items-center justify-center ${
+                            link.active
+                              ? "bg-[#0f172a] text-white shadow-xs"
+                              : "text-[#45464d] hover:text-[#0b1c30] hover:bg-[#eff4ff]"
+                          }`}
+                          aria-expanded={workspaceDropdownOpen}
+                          aria-label="Toggle Workspace dropdown menu"
+                        >
+                          <ChevronDown
+                            className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                              workspaceDropdownOpen ? "rotate-180" : ""
+                            }`}
+                          />
+                        </button>
+                      </div>
+
+                      {/* Workspace Navigation Dropdown */}
+                      {workspaceDropdownOpen && (
+                        <div className="absolute left-0 mt-2 w-56 bg-white rounded-2xl border border-[#0f172a]/10 shadow-[0_10px_30px_rgba(15,23,42,0.12)] py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                          <div className="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[#64748b]">
+                            Studio Navigation
+                          </div>
+                          <Link
+                            href="/workspace"
+                            className="flex items-center justify-between px-3.5 py-2 text-xs font-semibold text-[#0b1c30] hover:bg-[#eff4ff] transition-colors"
+                          >
+                            <span>Understand (Studio)</span>
+                            <span className="text-[10px] font-bold text-[#d97706] bg-[#fffbeb] px-1.5 py-0.5 rounded">Active</span>
+                          </Link>
+                          <Link
+                            href="/risks"
+                            className="flex items-center justify-between px-3.5 py-2 text-xs font-semibold text-[#0b1c30] hover:bg-[#eff4ff] transition-colors"
+                          >
+                            <span>Check Risks</span>
+                            <span className="text-[10px] font-bold text-[#ba1a1a] bg-[#fee2e2] px-1.5 py-0.5 rounded">3 High</span>
+                          </Link>
+                          <Link
+                            href="/ask"
+                            className="flex items-center justify-between px-3.5 py-2 text-xs font-semibold text-[#0b1c30] hover:bg-[#eff4ff] transition-colors"
+                          >
+                            <span>Ask Grounded Q&A</span>
+                            <span className="text-[10px] font-bold text-[#1d4ed8] bg-[#dbeafe] px-1.5 py-0.5 rounded">Live</span>
+                          </Link>
+                          <Link
+                            href="/compare"
+                            className="flex items-center px-3.5 py-2 text-xs font-semibold text-[#0b1c30] hover:bg-[#eff4ff] transition-colors"
+                          >
+                            <span>Compare Versions</span>
+                          </Link>
+                          <Link
+                            href="/actions"
+                            className="flex items-center justify-between px-3.5 py-2 text-xs font-semibold text-[#0b1c30] hover:bg-[#eff4ff] transition-colors"
+                          >
+                            <span>Action Center</span>
+                            <span className="text-[10px] font-bold text-[#b45309] bg-[#fef3c7] px-1.5 py-0.5 rounded">5 Pending</span>
+                          </Link>
+                          <Link
+                            href="/multilingual"
+                            className="flex items-center justify-between px-3.5 py-2 text-xs font-semibold text-[#0b1c30] hover:bg-[#eff4ff] transition-colors"
+                          >
+                            <span>Multilingual Indic</span>
+                            <span className="text-[10px] font-bold text-[#7e22ce] bg-[#f3e8ff] px-1.5 py-0.5 rounded">ಕನ್ನಡ/हिन्दी</span>
+                          </Link>
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
                 return (
                   <Link
                     key={link.name}
