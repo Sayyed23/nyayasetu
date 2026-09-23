@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { Suspense, useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import DashboardShell from "@/components/DashboardShell";
 import {
   Upload,
@@ -17,7 +18,6 @@ import {
   ZoomIn,
   ZoomOut,
   Maximize2,
-  Landmark,
   Pin,
   ExternalLink,
   Brain,
@@ -35,10 +35,33 @@ import {
   FileWarning,
   Layers,
   ArrowRight,
-  CheckCircle,
 } from "lucide-react";
 
+function formatFileSize(bytes: number) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 export default function WorkspacePage() {
+  return (
+    <Suspense
+      fallback={
+        <DashboardShell>
+          <main className="flex-1 px-4 sm:px-6 lg:px-8 py-10 bg-[#f8f9ff]">
+            <div className="max-w-3xl mx-auto min-h-[60vh] flex items-center justify-center">
+              <p className="text-sm text-[#64748b]">Loading workspace…</p>
+            </div>
+          </main>
+        </DashboardShell>
+      }
+    >
+      <WorkspaceStudio />
+    </Suspense>
+  );
+}
+
+function WorkspaceStudio() {
   // Dynamic user configuration from onboarding
   const [userConfig] = useState<{
     language?: string;
@@ -73,7 +96,7 @@ export default function WorkspacePage() {
     if (userConfig.objective === "compare") return "compare";
     return "understand";
   });
-  const [currentPage, setCurrentPage] = useState(3);
+  const [currentPage, setCurrentPage] = useState(1);
   const [zoomLevel, setZoomLevel] = useState(100);
   const [copiedDraft, setCopiedDraft] = useState(false);
   const [inRenegotiationList, setInRenegotiationList] = useState(false);
@@ -81,12 +104,16 @@ export default function WorkspacePage() {
   const [showOcrModal, setShowOcrModal] = useState(false);
   const [showScheduleBUpload, setShowScheduleBUpload] = useState(false);
   const [showAskAiDrawer, setShowAskAiDrawer] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(
-    () => new File([""], "Orion_PRD_v2.0.pdf", { type: "application/pdf" })
-  );
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [uploadError, setUploadError] = useState("");
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const addendumInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [aiQuestion, setAiQuestion] = useState("");
   const [aiChatHistory, setAiChatHistory] = useState([
     {
@@ -104,6 +131,25 @@ export default function WorkspacePage() {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    if (searchParams.get("new") !== "1") return;
+    setSelectedFile(null);
+    setIsAnalyzing(false);
+    setAnalysisProgress(0);
+    setUploadError("");
+    router.replace(pathname);
+  }, [searchParams, router, pathname]);
+
+  useEffect(() => {
+    if (!selectedFile) {
+      setPdfUrl(null);
+      return;
+    }
+    const url = URL.createObjectURL(selectedFile);
+    setPdfUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [selectedFile]);
 
   const formatTimer = (totalSec: number) => {
     const m = Math.floor(totalSec / 60);
@@ -187,6 +233,9 @@ export default function WorkspacePage() {
 
     setUploadError("");
     setSelectedFile(file);
+    setCurrentPage(1);
+    setZoomLevel(100);
+    setShowScheduleBUpload(false);
     setIsAnalyzing(true);
     setAnalysisProgress(0);
 
@@ -199,6 +248,12 @@ export default function WorkspacePage() {
         setIsAnalyzing(false);
       }
     }, 500);
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLLabelElement>) => {
+    event.preventDefault();
+    setIsDragOver(false);
+    handleFileSelect(event.dataTransfer.files?.[0]);
   };
 
   if (!selectedFile || isAnalyzing) {
@@ -221,10 +276,27 @@ export default function WorkspacePage() {
                   ? "Ingesting the document, preparing its text layer, and building your grounded workspace."
                   : "Choose a PDF to create a grounded workspace. Your analysis will use the document you provide instead of a preloaded example."}
               </p>
+              {isAnalyzing && selectedFile && (
+                <p className="mt-3 text-xs font-semibold text-[#0b1c30]">
+                  {selectedFile.name} • {formatFileSize(selectedFile.size)}
+                </p>
+              )}
               {!isAnalyzing && (
-                <label className="mt-7 mx-auto max-w-md border-2 border-dashed border-[#0f172a]/15 rounded-2xl p-7 flex flex-col items-center gap-2 cursor-pointer hover:border-[#d97706] hover:bg-[#fffaf3] transition-colors">
+                <label
+                  className={`mt-7 mx-auto max-w-md border-2 border-dashed rounded-2xl p-7 flex flex-col items-center gap-2 cursor-pointer transition-colors ${
+                    isDragOver
+                      ? "border-[#d97706] bg-[#fffaf3]"
+                      : "border-[#0f172a]/15 hover:border-[#d97706] hover:bg-[#fffaf3]"
+                  }`}
+                  onDragOver={(event) => {
+                    event.preventDefault();
+                    setIsDragOver(true);
+                  }}
+                  onDragLeave={() => setIsDragOver(false)}
+                  onDrop={handleDrop}
+                >
                   <span className="px-4 py-2 rounded-xl bg-[#0b1c30] text-white text-sm font-bold">Choose PDF</span>
-                  <span className="text-xs text-[#64748b]">PDF files only</span>
+                  <span className="text-xs text-[#64748b]">PDF files only • drag and drop accepted</span>
                   <input
                     type="file"
                     accept="application/pdf,.pdf"
@@ -326,7 +398,9 @@ export default function WorkspacePage() {
                       <p className="text-xs text-[#0b1c30] font-bold truncate leading-tight">
                         1. Ingest
                       </p>
-                      <p className="text-[11px] text-[#45464d] truncate">PDF • 1.8 MB</p>
+                      <p className="text-[11px] text-[#45464d] truncate">
+                        PDF • {formatFileSize(selectedFile.size)}
+                      </p>
                     </div>
                   </div>
 
@@ -393,7 +467,7 @@ export default function WorkspacePage() {
                   Document Type
                 </span>
                 <span className="text-xs sm:text-sm font-bold text-[#0b1c30] truncate mt-0.5">
-                  11-Month Tenancy Deed
+                  {selectedFile.name}
                 </span>
                 <span className="text-[11px] text-[#64748b] truncate">
                   {jurisdictionLabel} standard
@@ -528,144 +602,26 @@ export default function WorkspacePage() {
                 </div>
               </div>
 
-              {/* Rendered Legal Contract Document Page Sheet */}
-              <div className="relative w-full bg-white rounded-2xl border border-[#0f172a]/10 shadow-md p-6 sm:p-8 flex flex-col gap-6 select-text">
-                {/* Simulated Karnataka e-Stamp Header */}
-                <div className="w-full bg-[#eff4ff] rounded-xl p-3.5 flex flex-col gap-2 relative overflow-hidden border border-[#0f172a]/5">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <Landmark className="w-6 h-6 text-[#d97706] shrink-0" />
-                      <div>
-                        <p className="text-xs uppercase font-extrabold text-[#0b1c30] tracking-wider">
-                          Government of Karnataka • e-Stamp Certificate
-                        </p>
-                        <p className="text-[10px] text-[#45464d] font-mono">
-                          Certificate No: IN-KA89301298410292W • Date: 12-FEB-2024
-                        </p>
-                      </div>
-                    </div>
-                    <span className="px-2.5 py-0.5 rounded bg-white font-mono text-[11px] font-bold text-[#d97706] shadow-xs border border-amber-200">
-                      ₹500 NON-JUDICIAL
-                    </span>
-                  </div>
-                </div>
-
-                {/* Contract Body Document Text */}
-                <div className="relative flex flex-col gap-5 pt-1">
-                  {/* Document Title Header */}
-                  <div className="text-center pb-2 border-b border-slate-100">
-                    <h2 className="font-editorial text-xl sm:text-2xl text-[#0b1c30] uppercase tracking-wide font-bold">
-                      Residential Tenancy Agreement
-                    </h2>
-                    <p className="text-xs text-[#45464d] italic mt-0.5">
-                      Between Lessor: Sri K. Raghavan &amp; Lessee: Smt. Ananya Sen
-                    </p>
-                  </div>
-
-                  {/* Standard Clause 8 */}
-                  <div className="flex flex-col gap-1.5 text-[#45464d]">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-[#0b1c30] uppercase tracking-wide">
-                        Clause 8 • Maintenance &amp; Electricity Charges
-                      </span>
-                      <span className="text-[11px] text-[#76777d] font-mono">[P3: L1-L13]</span>
-                    </div>
-                    <p className="font-editorial text-xs sm:text-[13px] leading-relaxed text-[#0b1c30]/90">
-                      8.1 The Tenant shall regularly discharge recurring monthly consumption charges
-                      for electricity and BESCOM services directly to the designated power provider
-                      in accordance with meter serial number 481-B29. Monthly society maintenance of
-                      ₹4,500 shall be remitted concurrently with the monthly lease consideration on
-                      or before the fifth calendar day of each operating billing cycle.
-                    </p>
-                  </div>
-
-                  {/* ACTIVE HIGHLIGHTED SOURCE SPAN: Clause 9.3 */}
-                  <div
-                    id="clause-source-9-3"
-                    className="relative p-4 sm:p-5 rounded-xl bg-[#fffbeb] ring-2 ring-[#d97706] shadow-sm transition-all"
-                  >
-                    {/* Source Pin Badge */}
-                    <div className="absolute -top-3 left-4 px-2.5 py-0.5 rounded-full bg-[#d97706] text-white text-[10px] uppercase font-bold tracking-wider shadow-xs flex items-center gap-1">
-                      <Pin className="w-3 h-3" />
-                      <span>Active Anchor • Page 3, Lines 14-23</span>
-                    </div>
-
-                    <div className="flex items-center justify-between mt-1 mb-2">
-                      <span className="text-xs font-bold text-[#0b1c30] uppercase tracking-wide">
-                        Clause 9.3 • Rent Escalation &amp; Deposit Forfeiture
-                      </span>
-                      <span className="px-2 py-0.5 rounded bg-[#ffdad6] text-[#ba1a1a] text-[10px] font-bold">
-                        HIGH ASYMMETRY
-                      </span>
-                    </div>
-
-                    {/* Verbatim High Precision Quote */}
-                    <p className="font-editorial text-xs sm:text-[13.5px] leading-relaxed font-medium text-[#0b1c30]">
-                      “9.3 Unreasonable Escalation &amp; Security Deposit Forfeiture: The lessor reserves
-                      the unrestricted discretion to increase rent by fifteen percent (15%) upon
-                      expiration of eleven months without any obligation to negotiate, and withhold
-                      full security deposit (₹2,50,000) for ordinary wear and tear, cosmetic
-                      repainting, or any tenant vacating notice delivered under sixty (60) days.”
-                    </p>
-
-                    <div className="mt-3 pt-2 border-t border-amber-200/50 flex flex-wrap items-center justify-between text-[#45464d] text-[11px]">
-                      <div className="flex items-center gap-1.5">
-                        <CheckCircle className="w-3.5 h-3.5 text-[#d97706]" />
-                        <span>Confidence: 99.8% • Bounding Box [x:42, y:318, w:512, h:74]</span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setShowOcrModal(true)}
-                        className="text-[#d97706] font-semibold hover:underline flex items-center gap-1 mt-1 sm:mt-0"
-                      >
-                        <span>Inspect OCR Layer</span>
-                        <ExternalLink className="w-3 h-3" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Clause 10 */}
-                  <div className="flex flex-col gap-1.5 text-[#45464d] opacity-75">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-[#0b1c30] uppercase tracking-wide">
-                        Clause 10 • Right of Entry &amp; Quiet Enjoyment
-                      </span>
-                      <span className="text-[11px] text-[#76777d] font-mono">[P3: L24-L35]</span>
-                    </div>
-                    <p className="font-editorial text-xs sm:text-[13px] leading-relaxed text-[#0b1c30]/90">
-                      10.1 The Lessor or their authorized proxy representative shall reserve
-                      unrestricted ingress and inspection privileges over the demised premises upon
-                      delivering a verbal or written notification of minimum twenty-four (24)
-                      statutory hours during daylight working intervals.
-                    </p>
-                  </div>
-
-                  {/* Document Footer Verification Details */}
-                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-[#64748b] text-xs">
-                    <span className="italic">Lessee Initials: [A.S.]</span>
-                    <span className="font-mono">Page 3 of 7 — BLR/RES/2024/709</span>
-                    <span className="italic">Lessor Initials: [K.R.]</span>
-                  </div>
-                </div>
-
-                {/* Floating Source Navigator on Left Edge (Desktop) */}
-                <div className="hidden xl:flex flex-col gap-1 absolute -left-12 top-20 bg-white p-1 rounded-xl shadow-md border border-[#0f172a]/5">
-                  {[1, 2, 3, 4, 5].map((p) => (
-                    <button
-                      key={p}
-                      type="button"
-                      onClick={() => setCurrentPage(p)}
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold transition-all ${
-                        currentPage === p
-                          ? "bg-[#0b1c30] text-white ring-2 ring-[#d97706]"
-                          : "bg-[#eff4ff] hover:bg-[#e5eeff] text-[#0b1c30]"
-                      }`}
-                      title={`Jump to Page ${p}`}
+              {/* Uploaded PDF viewer */}
+              <div className="relative w-full bg-white rounded-2xl border border-[#0f172a]/10 shadow-md overflow-hidden min-h-[720px] flex flex-col">
+                {pdfUrl ? (
+                  <div className="flex-1 overflow-auto bg-[#e8edf5]">
+                    <div
+                      className="origin-top transition-transform duration-200"
+                      style={{ transform: `scale(${zoomLevel / 100})` }}
                     >
-                      P{p}
-                    </button>
-                  ))}
-                </div>
+                      <iframe
+                        title={selectedFile.name}
+                        src={pdfUrl}
+                        className="w-full min-h-[720px] h-[80vh] border-0 bg-white"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex-1 min-h-[720px] flex items-center justify-center text-sm text-[#64748b]">
+                    Preparing document preview…
+                  </div>
+                )}
               </div>
             </div>
 
@@ -685,6 +641,9 @@ export default function WorkspacePage() {
                         {jurisdictionLabel} Baseline
                       </span>
                     </div>
+                    <p className="mt-2 text-[11px] text-[#b45309] bg-[#fff7ed] border border-[#ffedd5] rounded-lg px-2.5 py-1.5 leading-relaxed">
+                      Risk and clause scores below are studio demo output, not extracted from {selectedFile.name}.
+                    </p>
                     <h3 className="font-editorial text-lg sm:text-xl font-bold text-[#0b1c30] mt-1">
                       {activeTab === "risks"
                         ? "Executive Risk Scrutiny & Vulnerability Index"
@@ -1265,23 +1224,30 @@ export default function WorkspacePage() {
               the evidence chain and ensure full deposit protection.
             </p>
 
-            <div className="border-2 border-dashed border-[#0f172a]/20 rounded-xl p-6 text-center flex flex-col items-center gap-2 bg-[#eff4ff]">
+            <label
+              className="border-2 border-dashed border-[#0f172a]/20 rounded-xl p-6 text-center flex flex-col items-center gap-2 bg-[#eff4ff] cursor-pointer hover:border-[#d97706]"
+              onDragOver={(event) => event.preventDefault()}
+              onDrop={(event) => {
+                event.preventDefault();
+                handleFileSelect(event.dataTransfer.files?.[0]);
+              }}
+            >
               <PlusCircle className="w-8 h-8 text-[#d97706]" />
               <p className="text-xs font-bold text-[#0b1c30]">
-                Drag &amp; drop Schedule B PDF or photo here
+                Drag &amp; drop a PDF here to replace the current document
               </p>
-              <p className="text-[10px] text-[#64748b]">PDF, JPG, PNG up to 25MB</p>
-              <button
-                type="button"
-                onClick={() => {
-                  alert("File selected. Simulating automatic OCR integration.");
-                  setShowScheduleBUpload(false);
-                }}
-                className="mt-2 px-3 py-1.5 rounded-lg bg-[#d97706] text-white text-xs font-bold hover:bg-[#b45309]"
-              >
+              <p className="text-[10px] text-[#64748b]">PDF files only</p>
+              <span className="mt-2 px-3 py-1.5 rounded-lg bg-[#d97706] text-white text-xs font-bold hover:bg-[#b45309]">
                 Browse Local Files
-              </button>
-            </div>
+              </span>
+              <input
+                ref={addendumInputRef}
+                type="file"
+                accept="application/pdf,.pdf"
+                className="sr-only"
+                onChange={(event) => handleFileSelect(event.target.files?.[0])}
+              />
+            </label>
 
             <div className="pt-2 flex justify-end">
               <button

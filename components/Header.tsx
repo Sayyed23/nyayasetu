@@ -288,7 +288,7 @@ export default function Header() {
             /* If AUTHENTICATED: Clean New Document CTA + User Account Menu */
             <>
               <Link
-                href="/workspace"
+                href="/workspace?new=1"
                 className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-[#d97706] text-white text-xs font-bold rounded-lg shadow-xs hover:bg-[#b45309] transition-all transform hover:-translate-y-0.5"
                 title="Upload another document or start a new analysis"
               >
@@ -375,7 +375,7 @@ export default function Header() {
                     {/* Actions divider */}
                     <div className="border-t border-slate-100 pt-1">
                       <Link
-                        href="/workspace"
+                        href="/workspace?new=1"
                         className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-[#d97706] hover:bg-[#fffbeb] transition-colors"
                       >
                         <Upload className="w-4 h-4" />
@@ -463,7 +463,7 @@ export default function Header() {
                   <span>Profile & Settings</span>
                 </Link>
                 <Link
-                  href="/workspace"
+                  href="/workspace?new=1"
                   onClick={() => setMobileMenuOpen(false)}
                   className="text-xs font-bold text-[#d97706] hover:underline flex items-center gap-1"
                 >

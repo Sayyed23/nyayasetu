@@ -108,7 +108,7 @@ export default function WorkspaceSubNav({ activeTab, documentName }: WorkspaceSu
     },
   ];
 
-  const docName = documentName || "Orion_PRD_v2.0.pdf";
+  const docName = documentName || "No document uploaded";
 
   return (
     <div className="w-full bg-[#f8f9ff] border-b border-[#0f172a]/10">

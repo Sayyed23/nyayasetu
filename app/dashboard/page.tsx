@@ -123,7 +123,7 @@ export default function DashboardPage() {
       title: "Upload & Analyze",
       description: "Upload a new legal document for AI-powered analysis",
       icon: Upload,
-      href: "/workspace",
+      href: "/workspace?new=1",
       color: "bg-[#d97706]",
       textColor: "text-white",
       hoverColor: "hover:bg-[#b45309]",
@@ -255,7 +255,7 @@ export default function DashboardPage() {
             </div>
 
             <Link
-              href="/workspace"
+              href="/workspace?new=1"
               className="self-start lg:self-center inline-flex items-center gap-2 px-5 py-2.5 bg-[#d97706] text-white text-sm font-bold rounded-xl shadow-sm hover:bg-[#b45309] transition-all transform hover:-translate-y-0.5"
             >
               <Upload className="w-4 h-4" />
